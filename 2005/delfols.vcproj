@@ -89,6 +89,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy $(ProjectDir)\..\delfols\config.ini $(TargetDir)"
 			/>
 		</Configuration>
 		<Configuration
@@ -191,7 +192,7 @@
 		/>
 		<AssemblyReference
 			RelativePath="..\..\..\..\..\..\LinkOut\DNAssembly\WProfile.dll"
-			AssemblyName="WProfile, Version=1.1.4269.17767, processorArchitecture=IA64"
+			AssemblyName="WProfile, Version=1.1.4270.13183, processorArchitecture=IA64"
 		/>
 	</References>
 	<Files>
