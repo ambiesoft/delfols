@@ -50,6 +50,15 @@ namespace delfols {
 	private: System::Windows::Forms::ToolStrip^  toolMain;
 	private: System::Windows::Forms::ToolStripButton^  tbAdd;
 	private: System::Windows::Forms::ToolStripButton^  tbExecute;
+	private: System::Windows::Forms::SplitContainer^  spRoot;
+	private: System::Windows::Forms::ListView^  lvLog;
+	private: System::Windows::Forms::ColumnHeader^  chNo;
+	private: System::Windows::Forms::ColumnHeader^  chFile;
+	private: System::Windows::Forms::ColumnHeader^  chResult;
+	private: System::Windows::Forms::ToolStrip^  toolLog;
+	private: System::Windows::Forms::ToolStripButton^  tbAll;
+	private: System::Windows::Forms::ToolStripButton^  tbOK;
+	private: System::Windows::Forms::ToolStripButton^  tbError;
 
 	protected: 
 
@@ -73,7 +82,20 @@ namespace delfols {
 			this->toolMain = (gcnew System::Windows::Forms::ToolStrip());
 			this->tbAdd = (gcnew System::Windows::Forms::ToolStripButton());
 			this->tbExecute = (gcnew System::Windows::Forms::ToolStripButton());
+			this->spRoot = (gcnew System::Windows::Forms::SplitContainer());
+			this->lvLog = (gcnew System::Windows::Forms::ListView());
+			this->chNo = (gcnew System::Windows::Forms::ColumnHeader());
+			this->chFile = (gcnew System::Windows::Forms::ColumnHeader());
+			this->chResult = (gcnew System::Windows::Forms::ColumnHeader());
+			this->toolLog = (gcnew System::Windows::Forms::ToolStrip());
+			this->tbAll = (gcnew System::Windows::Forms::ToolStripButton());
+			this->tbOK = (gcnew System::Windows::Forms::ToolStripButton());
+			this->tbError = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolMain->SuspendLayout();
+			this->spRoot->Panel1->SuspendLayout();
+			this->spRoot->Panel2->SuspendLayout();
+			this->spRoot->SuspendLayout();
+			this->toolLog->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// lvMain
@@ -82,7 +104,7 @@ namespace delfols {
 			this->lvMain->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->lvMain->Location = System::Drawing::Point(0, 25);
 			this->lvMain->Name = L"lvMain";
-			this->lvMain->Size = System::Drawing::Size(699, 393);
+			this->lvMain->Size = System::Drawing::Size(699, 184);
 			this->lvMain->TabIndex = 0;
 			this->lvMain->UseCompatibleStateImageBehavior = false;
 			this->lvMain->View = System::Windows::Forms::View::Details;
@@ -127,20 +149,105 @@ namespace delfols {
 			this->tbExecute->Text = L"Execute";
 			this->tbExecute->Click += gcnew System::EventHandler(this, &FormMain::tbExecute_Click);
 			// 
+			// spRoot
+			// 
+			this->spRoot->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->spRoot->Location = System::Drawing::Point(0, 0);
+			this->spRoot->Name = L"spRoot";
+			this->spRoot->Orientation = System::Windows::Forms::Orientation::Horizontal;
+			// 
+			// spRoot.Panel1
+			// 
+			this->spRoot->Panel1->Controls->Add(this->lvMain);
+			this->spRoot->Panel1->Controls->Add(this->toolMain);
+			// 
+			// spRoot.Panel2
+			// 
+			this->spRoot->Panel2->Controls->Add(this->lvLog);
+			this->spRoot->Panel2->Controls->Add(this->toolLog);
+			this->spRoot->Size = System::Drawing::Size(699, 418);
+			this->spRoot->SplitterDistance = 209;
+			this->spRoot->TabIndex = 2;
+			// 
+			// lvLog
+			// 
+			this->lvLog->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(3) {this->chNo, this->chFile, this->chResult});
+			this->lvLog->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->lvLog->Location = System::Drawing::Point(0, 25);
+			this->lvLog->Name = L"lvLog";
+			this->lvLog->Size = System::Drawing::Size(699, 180);
+			this->lvLog->TabIndex = 0;
+			this->lvLog->UseCompatibleStateImageBehavior = false;
+			this->lvLog->View = System::Windows::Forms::View::Details;
+			// 
+			// chNo
+			// 
+			this->chNo->Text = L"No";
+			// 
+			// chFile
+			// 
+			this->chFile->Text = L"File";
+			this->chFile->Width = 532;
+			// 
+			// chResult
+			// 
+			this->chResult->Text = L"Result";
+			// 
+			// toolLog
+			// 
+			this->toolLog->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {this->tbAll, this->tbOK, this->tbError});
+			this->toolLog->Location = System::Drawing::Point(0, 0);
+			this->toolLog->Name = L"toolLog";
+			this->toolLog->Size = System::Drawing::Size(699, 25);
+			this->toolLog->TabIndex = 1;
+			this->toolLog->Text = L"toolStrip1";
+			// 
+			// tbAll
+			// 
+			this->tbAll->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->tbAll->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tbAll.Image")));
+			this->tbAll->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->tbAll->Name = L"tbAll";
+			this->tbAll->Size = System::Drawing::Size(23, 22);
+			this->tbAll->Text = L"toolStripButton1";
+			// 
+			// tbOK
+			// 
+			this->tbOK->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->tbOK->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tbOK.Image")));
+			this->tbOK->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->tbOK->Name = L"tbOK";
+			this->tbOK->Size = System::Drawing::Size(23, 22);
+			this->tbOK->Text = L"toolStripButton1";
+			// 
+			// tbError
+			// 
+			this->tbError->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+			this->tbError->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tbError.Image")));
+			this->tbError->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->tbError->Name = L"tbError";
+			this->tbError->Size = System::Drawing::Size(23, 22);
+			this->tbError->Text = L"toolStripButton1";
+			// 
 			// FormMain
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(699, 418);
-			this->Controls->Add(this->lvMain);
-			this->Controls->Add(this->toolMain);
+			this->Controls->Add(this->spRoot);
 			this->Name = L"FormMain";
 			this->Text = L"FormMain";
 			this->Load += gcnew System::EventHandler(this, &FormMain::FormMain_Load);
 			this->toolMain->ResumeLayout(false);
 			this->toolMain->PerformLayout();
+			this->spRoot->Panel1->ResumeLayout(false);
+			this->spRoot->Panel1->PerformLayout();
+			this->spRoot->Panel2->ResumeLayout(false);
+			this->spRoot->Panel2->PerformLayout();
+			this->spRoot->ResumeLayout(false);
+			this->toolLog->ResumeLayout(false);
+			this->toolLog->PerformLayout();
 			this->ResumeLayout(false);
-			this->PerformLayout();
 
 		}
 #pragma endregion
