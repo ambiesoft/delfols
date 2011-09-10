@@ -3,7 +3,7 @@
 
 namespace delfols {
 
-	using namespace System::IO;
+	
 //System::Void FormMain::clbMain_DragEnter(System::Object^  sender, System::Windows::Forms::DragEventArgs^  e)
 //{
 //	if (e->Data->GetDataPresent(DataFormats::FileDrop, true) )
@@ -32,32 +32,19 @@ namespace delfols {
 		String^ s = System::Environment::GetFolderPath(System::Environment::SpecialFolder::LocalApplicationData);
 	}
 
-	void deleteAll(DirectoryInfo^ di)
+	void FormMain::deleteAll(DirectoryInfo^ di)
 	{
 		array<DirectoryInfo^>^ subdirs = di->GetDirectories();
 		for each(DirectoryInfo^ subdir in subdirs)
 		{
 			deleteAll(subdir);
-			try
-			{
-				subdir->Delete();
-			}
-			catch(System::Exception^)
-			{
-
-			}
+			theDeleteDir(subdir->FullName);
 		}
 
 		array<FileInfo^>^ files = di->GetFiles();
 		for each(FileInfo^ f in files)
 		{
-			try
-			{
-				f->Delete();
-			}
-			catch(System::Exception^)
-			{
-			}
+			theDeleteFile(f->FullName);
 		}
 	}
 	System::Void FormMain::tbExecute_Click(System::Object^  sender, System::EventArgs^  e)
@@ -69,6 +56,8 @@ namespace delfols {
 		{
 			return;
 		}
+
+		lvLog->Items->Clear();
 
 		for each(ListViewItem^ item in lvMain->Items)
 		{
@@ -90,7 +79,7 @@ namespace delfols {
 
 			if(File::Exists(path))
 			{
-				File::Delete(path);
+				theDeleteFile(path);
 				continue;
 			}
 
@@ -100,14 +89,9 @@ namespace delfols {
 			DirectoryInfo^ di = gcnew DirectoryInfo(path);
 			deleteAll(di);
 
-			if(path->EndsWith(L"\\"))
+			if(!path->EndsWith(L"\\"))
 			{
-				try
-				{
-					di->Delete();
-				}
-				catch(System::Exception^)
-				{}
+				theDeleteDir(di->FullName);
 			}
 		}
 	}
@@ -128,6 +112,10 @@ namespace delfols {
 		else if(x == L"${InternetCache}")
 		{
 			ret = System::Environment::GetFolderPath(System::Environment::SpecialFolder::InternetCache);
+		}
+		else if(x == L"${Recent}")
+		{
+			ret = System::Environment::GetFolderPath(System::Environment::SpecialFolder::Recent);
 		}
 		else if(x == L"${%Tmp%}")
 		{
@@ -198,6 +186,53 @@ namespace delfols {
 	}
 
 
+	void FormMain::addToLog(String^ filename, bool ok, String^ desc)
+	{
+		int count = lvLog->Items->Count + 1;
+		ListViewItem^ item = gcnew ListViewItem();
+		item->Text = count.ToString();
+		item->SubItems->Add(filename);
+		item->SubItems->Add(ok ? L"OK" : desc);
+
+		lvLog->Items->Add(item);
+	}
+	void FormMain::theDeleteFile(String^ path)
+	{
+		if(!path || path->Length < 3 || path[1] != L':' || path[2] != L'\\')
+		{
+			addToLog(path, false, TOI18NS(L"Not Fullpath"));
+			return;
+		}
+
+		try
+		{
+			File::Delete(path);
+			addToLog(path, true, L"");
+		}
+		catch(System::Exception^ ex)
+		{
+			addToLog(path, false, ex->Message);
+		}
+	}
+	
+	void FormMain::theDeleteDir(String^ path)
+	{
+		if(!path || path->Length < 3 || path[1] != L':' || path[2] != L'\\')
+		{
+			addToLog(path, false, TOI18NS(L"Not Fullpath"));
+			return;
+		}
+
+		try
+		{
+			Directory::Delete(path);
+			addToLog(path, true, L"");
+		}
+		catch(System::Exception^ ex)
+		{
+			addToLog(path, false, ex->Message);
+		}
+	}
 
 
 

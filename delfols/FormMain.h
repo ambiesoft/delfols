@@ -9,6 +9,7 @@ namespace delfols {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::IO;
 
 	/// <summary>
 	/// Form1 ‚ÌŠT—v
@@ -254,6 +255,10 @@ namespace delfols {
 
 	private:
 		void SetPath(array<String^>^ paths);
+		void deleteAll(DirectoryInfo^ di);
+		void theDeleteFile(String^ path);
+		void theDeleteDir(String^ path);
+		void addToLog(String^ filename, bool ok, String^ desc);
 	private:
 		System::Void tbAdd_Click(System::Object^  sender, System::EventArgs^  e);
 		System::Void FormMain_Load(System::Object^  sender, System::EventArgs^  e);
