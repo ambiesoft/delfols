@@ -129,6 +129,14 @@ namespace delfols {
 		{
 			ret = System::Environment::GetFolderPath(System::Environment::SpecialFolder::InternetCache);
 		}
+		else if(x == L"${%Tmp%}")
+		{
+			ret = System::Environment::GetEnvironmentVariable(L"Tmp");
+		}
+		else if(x == L"${%Temp%}")
+		{
+			ret = System::Environment::GetEnvironmentVariable(L"Temp");
+		}
 		else
 		{
 			throw gcnew System::Exception();
