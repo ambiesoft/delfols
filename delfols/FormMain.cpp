@@ -3,7 +3,14 @@
 
 namespace delfols {
 
+	FormMain::FormMain(void)
+	{
+		InitializeComponent();
+		String^ inipath = Path::Combine(System::IO::Path::GetDirectoryName(Application::ExecutablePath), Application::ProductName + L".ini");
+	}
 	
+
+
 //System::Void FormMain::clbMain_DragEnter(System::Object^  sender, System::Windows::Forms::DragEventArgs^  e)
 //{
 //	if (e->Data->GetDataPresent(DataFormats::FileDrop, true) )
@@ -34,7 +41,17 @@ namespace delfols {
 
 	void FormMain::deleteAll(DirectoryInfo^ di)
 	{
-		array<DirectoryInfo^>^ subdirs = di->GetDirectories();
+		array<DirectoryInfo^>^ subdirs = nullptr;
+		try
+		{
+			subdirs = di->GetDirectories();
+		}
+		catch(System::Exception^ ex)
+		{
+			addToLog(di->FullName, false, ex->Message);
+			return;
+		}
+
 		for each(DirectoryInfo^ subdir in subdirs)
 		{
 			deleteAll(subdir);
@@ -175,14 +192,18 @@ namespace delfols {
 	System::Void FormMain::FormMain_Load(System::Object^  sender, System::EventArgs^  e)
 	{
 		array<String^>^ paths;
-		String^ inipath = Path::Combine(System::IO::Path::GetDirectoryName(Application::ExecutablePath), L"config.ini");
-		if(File::Exists(inipath))
+		String^ confpath = Path::Combine(System::IO::Path::GetDirectoryName(Application::ExecutablePath), L"config.ini");
+		if(File::Exists(confpath))
 		{
-			Ambiesoft::WProfiler::HashIni^ ini = Ambiesoft::WProfiler::WProfile::ReadAll(inipath, true);
+			Ambiesoft::WProfiler::HashIni^ ini = Ambiesoft::WProfiler::WProfile::ReadAll(confpath, true);
 			Ambiesoft::WProfiler::WProfile::WGetPrivateProfileStringArray(L"dirs", L"dir", paths, ini);
 		}
 
 		SetPath(paths);
+
+
+		
+
 	}
 
 

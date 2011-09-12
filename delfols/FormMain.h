@@ -23,13 +23,7 @@ namespace delfols {
 	public ref class FormMain : public System::Windows::Forms::Form
 	{
 	public:
-		FormMain(void)
-		{
-			InitializeComponent();
-			//
-			//TODO: ここにコンストラクタ コードを追加します
-			//
-		}
+		FormMain(void);
 
 	protected:
 		/// <summary>
