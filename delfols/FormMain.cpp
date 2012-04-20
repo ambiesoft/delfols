@@ -195,8 +195,9 @@ namespace delfols {
 		String^ confpath = Path::Combine(System::IO::Path::GetDirectoryName(Application::ExecutablePath), L"config.ini");
 		if(File::Exists(confpath))
 		{
-			Ambiesoft::WProfiler::HashIni^ ini = Ambiesoft::WProfiler::WProfile::ReadAll(confpath, true);
-			Ambiesoft::WProfiler::WProfile::WGetPrivateProfileStringArray(L"dirs", L"dir", paths, ini);
+			//Ambiesoft::WProfiler::HashIni^ ini = Ambiesoft::WProfiler::WProfile::ReadAll(confpath, true);
+			Ambiesoft::Profile::HashIni^ ini = Ambiesoft::Profile::Profile::ReadAll(confpath, true);
+			Ambiesoft::Profile::Profile::GetStringArray(L"dirs", L"dir", paths, ini);
 		}
 
 		SetPath(paths);

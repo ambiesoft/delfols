@@ -175,10 +175,6 @@
 			AssemblyName="System, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
 		/>
 		<AssemblyReference
-			RelativePath="System.Data.dll"
-			AssemblyName="System.Data, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=x86"
-		/>
-		<AssemblyReference
 			RelativePath="System.Drawing.dll"
 			AssemblyName="System.Drawing, Version=2.0.0.0, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
 		/>
@@ -191,8 +187,8 @@
 			AssemblyName="System.Xml, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
 		/>
 		<AssemblyReference
-			RelativePath="..\..\..\..\..\..\LinkOut\DNAssembly\WProfile.dll"
-			AssemblyName="WProfile, Version=1.1.4270.13183, processorArchitecture=IA64"
+			RelativePath="..\..\..\..\..\..\LinkOut\DNAssembly\Profile.dll"
+			AssemblyName="Profile, Version=1.0.0.0, processorArchitecture=MSIL"
 		/>
 	</References>
 	<Files>
