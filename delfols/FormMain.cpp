@@ -134,13 +134,10 @@ namespace delfols {
 		{
 			ret = System::Environment::GetFolderPath(System::Environment::SpecialFolder::Recent);
 		}
-		else if(x == L"${%Tmp%}")
+		else if(x->StartsWith(L"${%"))
 		{
-			ret = System::Environment::GetEnvironmentVariable(L"Tmp");
-		}
-		else if(x == L"${%Temp%}")
-		{
-			ret = System::Environment::GetEnvironmentVariable(L"Temp");
+			String^ envval = x->Substring(3,x->Length-5);
+			ret = System::Environment::GetEnvironmentVariable(envval);
 		}
 		else
 		{

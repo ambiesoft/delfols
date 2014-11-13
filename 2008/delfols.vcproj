@@ -195,8 +195,8 @@
 			MinFrameworkVersion="131072"
 		/>
 		<AssemblyReference
-			RelativePath="..\..\..\..\..\..\LinkOut\DNAssembly\WProfile.dll"
-			AssemblyName="WProfile, Version=1.1.4132.35111, processorArchitecture=IA64"
+			RelativePath="..\..\..\..\..\..\Linkout\DNAssembly\Profile.dll"
+			AssemblyName="Profile, Version=1.0.0.0, processorArchitecture=MSIL"
 			MinFrameworkVersion="131072"
 		/>
 	</References>
