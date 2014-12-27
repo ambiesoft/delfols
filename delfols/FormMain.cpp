@@ -54,6 +54,12 @@ namespace delfols {
 
 		for each(DirectoryInfo^ subdir in subdirs)
 		{
+			if ((subdir->Attributes & System::IO::FileAttributes::ReparsePoint)==System::IO::FileAttributes::ReparsePoint)
+			{
+				theDeleteDir(subdir->FullName);
+				continue;
+			}
+			
 			deleteAll(subdir);
 			theDeleteDir(subdir->FullName);
 		}
