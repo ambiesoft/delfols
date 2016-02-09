@@ -67,7 +67,15 @@ namespace delfols {
 		array<FileInfo^>^ files = di->GetFiles();
 		for each(FileInfo^ f in files)
 		{
-			theDeleteFile(f->FullName);
+			try
+			{
+				String^ full = f->FullName;
+				theDeleteFile(full);
+			}
+			catch(System::Exception^ ex)
+			{
+				addToLog(di->FullName, false, ex->Message);
+			}
 		}
 	}
 	System::Void FormMain::tbExecute_Click(System::Object^  sender, System::EventArgs^  e)
