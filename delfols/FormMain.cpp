@@ -207,8 +207,8 @@ namespace delfols {
 		if(File::Exists(confpath))
 		{
 			//Ambiesoft::WProfiler::HashIni^ ini = Ambiesoft::WProfiler::WProfile::ReadAll(confpath, true);
-			Ambiesoft::Profile::HashIni^ ini = Ambiesoft::Profile::Profile::ReadAll(confpath, true);
-			Ambiesoft::Profile::Profile::GetStringArray(L"dirs", L"dir", paths, ini);
+			Ambiesoft::HashIni^ ini = Ambiesoft::Profile::ReadAll(confpath, true);
+			Ambiesoft::Profile::GetStringArray(L"dirs", L"dir", paths, ini);
 		}
 
 		SetPath(paths);
