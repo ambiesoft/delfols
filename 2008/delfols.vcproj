@@ -219,6 +219,38 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\MyUtility\getStdString.net.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\delfols\helper.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\delfols\noStdafxHelper.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\MyUtility\StartProcess.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\delfols\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -255,7 +287,23 @@
 				</File>
 			</File>
 			<File
+				RelativePath="..\..\MyUtility\getStdString.net.h"
+				>
+			</File>
+			<File
+				RelativePath="..\delfols\helper.h"
+				>
+			</File>
+			<File
+				RelativePath="..\delfols\noStdafxHelper.h"
+				>
+			</File>
+			<File
 				RelativePath="..\delfols\resource.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\MyUtility\StartProcess.h"
 				>
 			</File>
 			<File

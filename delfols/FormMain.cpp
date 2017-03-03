@@ -1,7 +1,13 @@
 #include "stdafx.h"
 #include "FormMain.h"
+#include "helper.h"
+#include "noStdafxHelper.h"
+#include "../../MyUtility/getStdString.net.h"
+#include "../../MyUtility/StartProcess.h"
 
 namespace delfols {
+	using namespace System::Diagnostics;
+	using namespace std;
 
 	FormMain::FormMain(void)
 	{
@@ -151,7 +157,7 @@ namespace delfols {
 		else if(x->StartsWith(L"${%"))
 		{
 			String^ envval = x->Substring(3,x->Length-5);
-			ret = System::Environment::GetEnvironmentVariable(envval);
+			ret = myGetEnvironmentVariable(envval);
 		}
 		else
 		{
@@ -213,8 +219,10 @@ namespace delfols {
 
 		SetPath(paths);
 
-
-		
+		if(IsUserAnAdmin())
+		{
+			this->Text += L" " + TOI18NS(L"(Admin)");
+		}
 
 	}
 
@@ -269,5 +277,26 @@ namespace delfols {
 
 
 
+
+	System::Void FormMain::tbAsAdmin_Click(System::Object^  sender, System::EventArgs^  e)
+	{
+		//std::wstring app = Ambiesoft::getStdWstring(System::Environment::CommandLine);
+		//if(!StartProcess(app.c_str()))
+		//{
+		//	ShowErrorMessage(TOI18NS(L"Failed : Process start"));
+		//}
+
+		try
+		{
+			ProcessStartInfo psi(Application::ExecutablePath);
+			psi.Verb = L"runas";
+			Process::Start(%psi);
+			this->Close();
+		}
+		catch(Exception^ ex)
+		{
+			ShowErrorMessage(ex);
+		}
+	}
 
 }

@@ -51,6 +51,7 @@ namespace delfols {
 	private: System::Windows::Forms::ColumnHeader^  chResult;
 	private: System::Windows::Forms::ToolStrip^  toolLog;
 	private: System::Windows::Forms::ToolStripButton^  tbAll;
+	private: System::Windows::Forms::ToolStripButton^  tbAsAdmin;
 
 
 
@@ -83,6 +84,7 @@ namespace delfols {
 			this->chResult = (gcnew System::Windows::Forms::ColumnHeader());
 			this->toolLog = (gcnew System::Windows::Forms::ToolStrip());
 			this->tbAll = (gcnew System::Windows::Forms::ToolStripButton());
+			this->tbAsAdmin = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolMain->SuspendLayout();
 			this->spRoot->Panel1->SuspendLayout();
 			this->spRoot->Panel2->SuspendLayout();
@@ -96,7 +98,7 @@ namespace delfols {
 			this->lvMain->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->lvMain->Location = System::Drawing::Point(0, 25);
 			this->lvMain->Name = L"lvMain";
-			this->lvMain->Size = System::Drawing::Size(699, 201);
+			this->lvMain->Size = System::Drawing::Size(699, 183);
 			this->lvMain->TabIndex = 0;
 			this->lvMain->UseCompatibleStateImageBehavior = false;
 			this->lvMain->View = System::Windows::Forms::View::Details;
@@ -113,7 +115,8 @@ namespace delfols {
 			// 
 			// toolMain
 			// 
-			this->toolMain->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {this->tbAdd, this->tbExecute});
+			this->toolMain->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {this->tbAdd, this->tbExecute, 
+				this->tbAsAdmin});
 			this->toolMain->Location = System::Drawing::Point(0, 0);
 			this->toolMain->Name = L"toolMain";
 			this->toolMain->Size = System::Drawing::Size(699, 25);
@@ -155,8 +158,8 @@ namespace delfols {
 			// 
 			this->spRoot->Panel2->Controls->Add(this->lvLog);
 			this->spRoot->Panel2->Controls->Add(this->toolLog);
-			this->spRoot->Size = System::Drawing::Size(699, 453);
-			this->spRoot->SplitterDistance = 226;
+			this->spRoot->Size = System::Drawing::Size(699, 418);
+			this->spRoot->SplitterDistance = 208;
 			this->spRoot->TabIndex = 2;
 			// 
 			// lvLog
@@ -165,7 +168,7 @@ namespace delfols {
 			this->lvLog->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->lvLog->Location = System::Drawing::Point(0, 25);
 			this->lvLog->Name = L"lvLog";
-			this->lvLog->Size = System::Drawing::Size(699, 198);
+			this->lvLog->Size = System::Drawing::Size(699, 181);
 			this->lvLog->TabIndex = 0;
 			this->lvLog->UseCompatibleStateImageBehavior = false;
 			this->lvLog->View = System::Windows::Forms::View::Details;
@@ -201,11 +204,21 @@ namespace delfols {
 			this->tbAll->Size = System::Drawing::Size(23, 22);
 			this->tbAll->Text = L"toolStripButton1";
 			// 
+			// tbAsAdmin
+			// 
+			this->tbAsAdmin->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tbAsAdmin.Image")));
+			this->tbAsAdmin->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->tbAsAdmin->Name = L"tbAsAdmin";
+			this->tbAsAdmin->Size = System::Drawing::Size(82, 22);
+			this->tbAsAdmin->Text = L"As Admin";
+			this->tbAsAdmin->ToolTipText = L"As Admin";
+			this->tbAsAdmin->Click += gcnew System::EventHandler(this, &FormMain::tbAsAdmin_Click);
+			// 
 			// FormMain
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(699, 453);
+			this->ClientSize = System::Drawing::Size(699, 418);
 			this->Controls->Add(this->spRoot);
 			this->Name = L"FormMain";
 			this->Text = L"delfols";
@@ -234,12 +247,7 @@ namespace delfols {
 		System::Void tbAdd_Click(System::Object^  sender, System::EventArgs^  e);
 		System::Void FormMain_Load(System::Object^  sender, System::EventArgs^  e);
 		System::Void tbExecute_Click(System::Object^  sender, System::EventArgs^  e);
-
-
-
-
-
-
+		System::Void tbAsAdmin_Click(System::Object^  sender, System::EventArgs^  e);
 
 };
 
