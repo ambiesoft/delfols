@@ -86,7 +86,9 @@ namespace delfols {
 	}
 	System::Void FormMain::tbExecute_Click(System::Object^  sender, System::EventArgs^  e)
 	{
-		if(System::Windows::Forms::DialogResult::Yes != MessageBox::Show(TOI18NS(L"Are you sure to delete files and folders on the list?"),
+		
+		if(System::Windows::Forms::DialogResult::Yes != Ambiesoft::CenteredMessageBox::Show(this,
+			TOI18NS(L"Are you sure to delete files and folders on the list?"),
 			Application::ProductName,
 			MessageBoxButtons::YesNo,
 			MessageBoxIcon::Question))
@@ -295,7 +297,7 @@ namespace delfols {
 		}
 		catch(Exception^ ex)
 		{
-			ShowErrorMessage(ex);
+			ShowErrorMessage(this, ex);
 		}
 	}
 

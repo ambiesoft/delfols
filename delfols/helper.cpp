@@ -5,9 +5,10 @@ namespace delfols {
 	using namespace System;
 	using namespace System::Windows::Forms;
 
-	void ShowErrorMessage(String^ s)
+	void ShowErrorMessage(IWin32Window^ win, String^ s)
 	{
-		MessageBox::Show(s,
+		Ambiesoft::CenteredMessageBox::Show(win,
+			s,
 			Application::ProductName,
 			MessageBoxButtons::OK,
 			MessageBoxIcon::Error);
