@@ -194,6 +194,10 @@
 			RelativePath="..\..\..\..\..\..\Linkout\DNAssembly\Ambiesoft.Profile.dll"
 			AssemblyName="Ambiesoft.Profile, Version=1.0.0.0, processorArchitecture=MSIL"
 		/>
+		<AssemblyReference
+			RelativePath="..\..\..\..\..\..\Linkout\DNAssembly\CenterWinDialog.dll"
+			AssemblyName="CenterWinDialog, Version=1.0.0.0, processorArchitecture=MSIL"
+		/>
 	</References>
 	<Files>
 		<Filter

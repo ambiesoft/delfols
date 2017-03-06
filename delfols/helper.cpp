@@ -5,7 +5,7 @@ namespace delfols {
 	using namespace System;
 	using namespace System::Windows::Forms;
 
-	void ShowErrorMessage(IWin32Window^ win, String^ s)
+	void ShowErrorMessage(Form^ win, String^ s)
 	{
 		Ambiesoft::CenteredMessageBox::Show(win,
 			s,
@@ -15,7 +15,11 @@ namespace delfols {
 	}
 	void ShowErrorMessage(Exception^ ex)
 	{
-		ShowErrorMessage(ex->Message);
+		ShowErrorMessage(nullptr, ex->Message);
+	}
+	void ShowErrorMessage(Form^ win, Exception^ ex)
+	{
+		ShowErrorMessage(win, ex->Message);
 	}
 
 
