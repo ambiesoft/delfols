@@ -224,6 +224,11 @@ namespace delfols {
 		if(IsUserAnAdmin())
 		{
 			this->Text += L" " + TOI18NS(L"(Admin)");
+			tbAsAdmin->Visible = false;
+		}
+		else
+		{
+			tbAsAdmin->Visible = true;
 		}
 
 	}
