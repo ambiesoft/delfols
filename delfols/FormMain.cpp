@@ -2,8 +2,8 @@
 #include "FormMain.h"
 #include "helper.h"
 #include "noStdafxHelper.h"
-#include "../../MyUtility/getStdString.net.h"
-#include "../../MyUtility/StartProcess.h"
+#include "../../lsMisc/getStdString.net.h"
+#include "../../lsMisc/StartProcess.h"
 
 namespace delfols {
 	using namespace System::Diagnostics;
