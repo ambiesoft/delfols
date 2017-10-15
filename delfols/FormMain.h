@@ -10,24 +10,12 @@ namespace delfols {
 	using namespace System::Drawing;
 	using namespace System::IO;
 
-	/// <summary>
-	/// Form1 の概要
-	///
-	/// 警告: このクラスの名前を変更する場合、このクラスが依存するすべての .resx ファイルに関連付けられた
-	///          マネージ リソース コンパイラ ツールに対して 'Resource File Name' プロパティを
-	///          変更する必要があります。この変更を行わないと、
-	///          デザイナと、このフォームに関連付けられたローカライズ済みリソースとが、
-	///          正しく相互に利用できなくなります。
-	/// </summary>
 	public ref class FormMain : public System::Windows::Forms::Form
 	{
 	public:
 		FormMain(void);
 
 	protected:
-		/// <summary>
-		/// 使用中のリソースをすべてクリーンアップします。
-		/// </summary>
 		~FormMain()
 		{
 			if (components)
@@ -49,8 +37,8 @@ namespace delfols {
 	private: System::Windows::Forms::ColumnHeader^  chNo;
 	private: System::Windows::Forms::ColumnHeader^  chFile;
 	private: System::Windows::Forms::ColumnHeader^  chResult;
-	private: System::Windows::Forms::ToolStrip^  toolLog;
-	private: System::Windows::Forms::ToolStripButton^  tbAll;
+
+
 	private: System::Windows::Forms::ToolStripButton^  tbAsAdmin;
 
 
@@ -58,16 +46,9 @@ namespace delfols {
 	protected: 
 
 	private:
-		/// <summary>
-		/// 必要なデザイナ変数です。
-		/// </summary>
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
-		/// <summary>
-		/// デザイナ サポートに必要なメソッドです。このメソッドの内容を
-		/// コード エディタで変更しないでください。
-		/// </summary>
 		void InitializeComponent(void)
 		{
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(FormMain::typeid));
@@ -77,19 +58,17 @@ namespace delfols {
 			this->toolMain = (gcnew System::Windows::Forms::ToolStrip());
 			this->tbAdd = (gcnew System::Windows::Forms::ToolStripButton());
 			this->tbExecute = (gcnew System::Windows::Forms::ToolStripButton());
+			this->tbAsAdmin = (gcnew System::Windows::Forms::ToolStripButton());
 			this->spRoot = (gcnew System::Windows::Forms::SplitContainer());
 			this->lvLog = (gcnew System::Windows::Forms::ListView());
 			this->chNo = (gcnew System::Windows::Forms::ColumnHeader());
 			this->chFile = (gcnew System::Windows::Forms::ColumnHeader());
 			this->chResult = (gcnew System::Windows::Forms::ColumnHeader());
-			this->toolLog = (gcnew System::Windows::Forms::ToolStrip());
-			this->tbAll = (gcnew System::Windows::Forms::ToolStripButton());
-			this->tbAsAdmin = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolMain->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->spRoot))->BeginInit();
 			this->spRoot->Panel1->SuspendLayout();
 			this->spRoot->Panel2->SuspendLayout();
 			this->spRoot->SuspendLayout();
-			this->toolLog->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// lvMain
@@ -98,7 +77,7 @@ namespace delfols {
 			this->lvMain->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->lvMain->Location = System::Drawing::Point(0, 25);
 			this->lvMain->Name = L"lvMain";
-			this->lvMain->Size = System::Drawing::Size(699, 183);
+			this->lvMain->Size = System::Drawing::Size(699, 200);
 			this->lvMain->TabIndex = 0;
 			this->lvMain->UseCompatibleStateImageBehavior = false;
 			this->lvMain->View = System::Windows::Forms::View::Details;
@@ -142,6 +121,16 @@ namespace delfols {
 			this->tbExecute->Text = L"Execute";
 			this->tbExecute->Click += gcnew System::EventHandler(this, &FormMain::tbExecute_Click);
 			// 
+			// tbAsAdmin
+			// 
+			this->tbAsAdmin->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tbAsAdmin.Image")));
+			this->tbAsAdmin->ImageTransparentColor = System::Drawing::Color::Magenta;
+			this->tbAsAdmin->Name = L"tbAsAdmin";
+			this->tbAsAdmin->Size = System::Drawing::Size(82, 22);
+			this->tbAsAdmin->Text = L"As Admin";
+			this->tbAsAdmin->ToolTipText = L"As Admin";
+			this->tbAsAdmin->Click += gcnew System::EventHandler(this, &FormMain::tbAsAdmin_Click);
+			// 
 			// spRoot
 			// 
 			this->spRoot->Dock = System::Windows::Forms::DockStyle::Fill;
@@ -157,18 +146,18 @@ namespace delfols {
 			// spRoot.Panel2
 			// 
 			this->spRoot->Panel2->Controls->Add(this->lvLog);
-			this->spRoot->Panel2->Controls->Add(this->toolLog);
-			this->spRoot->Size = System::Drawing::Size(699, 418);
-			this->spRoot->SplitterDistance = 208;
+			this->spRoot->Size = System::Drawing::Size(699, 453);
+			this->spRoot->SplitterDistance = 225;
 			this->spRoot->TabIndex = 2;
 			// 
 			// lvLog
 			// 
 			this->lvLog->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(3) {this->chNo, this->chFile, this->chResult});
 			this->lvLog->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->lvLog->Location = System::Drawing::Point(0, 25);
+			this->lvLog->FullRowSelect = true;
+			this->lvLog->Location = System::Drawing::Point(0, 0);
 			this->lvLog->Name = L"lvLog";
-			this->lvLog->Size = System::Drawing::Size(699, 181);
+			this->lvLog->Size = System::Drawing::Size(699, 224);
 			this->lvLog->TabIndex = 0;
 			this->lvLog->UseCompatibleStateImageBehavior = false;
 			this->lvLog->View = System::Windows::Forms::View::Details;
@@ -186,69 +175,47 @@ namespace delfols {
 			// 
 			this->chResult->Text = L"Result";
 			// 
-			// toolLog
-			// 
-			this->toolLog->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) {this->tbAll});
-			this->toolLog->Location = System::Drawing::Point(0, 0);
-			this->toolLog->Name = L"toolLog";
-			this->toolLog->Size = System::Drawing::Size(699, 25);
-			this->toolLog->TabIndex = 1;
-			this->toolLog->Text = L"toolStrip1";
-			// 
-			// tbAll
-			// 
-			this->tbAll->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-			this->tbAll->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tbAll.Image")));
-			this->tbAll->ImageTransparentColor = System::Drawing::Color::Magenta;
-			this->tbAll->Name = L"tbAll";
-			this->tbAll->Size = System::Drawing::Size(23, 22);
-			this->tbAll->Text = L"toolStripButton1";
-			// 
-			// tbAsAdmin
-			// 
-			this->tbAsAdmin->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tbAsAdmin.Image")));
-			this->tbAsAdmin->ImageTransparentColor = System::Drawing::Color::Magenta;
-			this->tbAsAdmin->Name = L"tbAsAdmin";
-			this->tbAsAdmin->Size = System::Drawing::Size(82, 22);
-			this->tbAsAdmin->Text = L"As Admin";
-			this->tbAsAdmin->ToolTipText = L"As Admin";
-			this->tbAsAdmin->Click += gcnew System::EventHandler(this, &FormMain::tbAsAdmin_Click);
-			// 
 			// FormMain
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(699, 418);
+			this->ClientSize = System::Drawing::Size(699, 453);
 			this->Controls->Add(this->spRoot);
 			this->Name = L"FormMain";
 			this->Text = L"delfols";
+			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &FormMain::FormMain_FormClosing);
 			this->Load += gcnew System::EventHandler(this, &FormMain::FormMain_Load);
 			this->toolMain->ResumeLayout(false);
 			this->toolMain->PerformLayout();
 			this->spRoot->Panel1->ResumeLayout(false);
 			this->spRoot->Panel1->PerformLayout();
 			this->spRoot->Panel2->ResumeLayout(false);
-			this->spRoot->Panel2->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->spRoot))->EndInit();
 			this->spRoot->ResumeLayout(false);
-			this->toolLog->ResumeLayout(false);
-			this->toolLog->PerformLayout();
 			this->ResumeLayout(false);
 
 		}
 #pragma endregion
 
 	private:
+		delegate bool BVDelegate();
+		System::Threading::Thread^ thread_;
+	private:
 		void SetPath(array<String^>^ paths);
 		void deleteAll(DirectoryInfo^ di);
 		void theDeleteFile(String^ path);
 		void theDeleteDir(String^ path);
 		void addToLog(String^ filename, bool ok, String^ desc);
+		void threadStart(Object^ obj);
+		bool OnThreadStarted();
+		bool OnThreadEnded();
 	private:
 		System::Void tbAdd_Click(System::Object^  sender, System::EventArgs^  e);
 		System::Void FormMain_Load(System::Object^  sender, System::EventArgs^  e);
 		System::Void tbExecute_Click(System::Object^  sender, System::EventArgs^  e);
 		System::Void tbAsAdmin_Click(System::Object^  sender, System::EventArgs^  e);
-
+		System::Void FormMain_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e);
+		 
 };
 
 

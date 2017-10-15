@@ -5,9 +5,15 @@
 #include "../../lsMisc/getStdString.net.h"
 #include "../../lsMisc/StartProcess.h"
 
+// thread suspend and resume
+#pragma warning(disable:4947)
+
 namespace delfols {
 	using namespace System::Diagnostics;
+	using namespace System::Threading;
+	using namespace System::Collections::Generic;
 	using namespace std;
+	using namespace Ambiesoft;
 
 	FormMain::FormMain(void)
 	{
@@ -84,10 +90,55 @@ namespace delfols {
 			}
 		}
 	}
+	
+	bool FormMain::OnThreadStarted()
+	{
+		return true;
+	}
+	bool FormMain::OnThreadEnded()
+	{
+		return true;
+	}
+
+	void FormMain::threadStart(Object^ obj)
+	{
+		BeginInvoke(gcnew BVDelegate(this,&FormMain::OnThreadStarted));
+
+		List<String^>^ allToDel = (List<String^>^)obj;
+		for each(String^ path in allToDel)
+		{
+			if(File::Exists(path))
+			{
+				theDeleteFile(path);
+				continue;
+			}
+
+			if(!Directory::Exists(path))
+				continue;
+
+			DirectoryInfo^ di = gcnew DirectoryInfo(path);
+			deleteAll(di);
+
+			if(!path->EndsWith(L"\\"))
+			{
+				theDeleteDir(di->FullName);
+			}
+		}
+		BeginInvoke(gcnew BVDelegate(this,&FormMain::OnThreadEnded));
+	}
+
 	System::Void FormMain::tbExecute_Click(System::Object^  sender, System::EventArgs^  e)
 	{
-		
-		if(System::Windows::Forms::DialogResult::Yes != Ambiesoft::CenteredMessageBox::Show(this,
+		if(thread_)
+		{
+			if(thread_->IsAlive)
+				return;
+			delete thread_;
+			thread_=nullptr;
+		}
+
+		if(System::Windows::Forms::DialogResult::Yes != CppUtils::CenteredMessageBox(
+			this,
 			TOI18NS(L"Are you sure to delete files and folders on the list?"),
 			Application::ProductName,
 			MessageBoxButtons::YesNo,
@@ -97,6 +148,8 @@ namespace delfols {
 		}
 
 		lvLog->Items->Clear();
+
+		List<String^>^ allToDel = gcnew List<String^>();
 
 		for each(ListViewItem^ item in lvMain->Items)
 		{
@@ -116,23 +169,11 @@ namespace delfols {
 			if(path[1] != L':' || path[2] != L'\\')
 				continue;
 
-			if(File::Exists(path))
-			{
-				theDeleteFile(path);
-				continue;
-			}
-
-			if(!Directory::Exists(path))
-				continue;
-
-			DirectoryInfo^ di = gcnew DirectoryInfo(path);
-			deleteAll(di);
-
-			if(!path->EndsWith(L"\\"))
-			{
-				theDeleteDir(di->FullName);
-			}
+			allToDel->Add(path);
 		}
+
+		thread_ = gcnew Thread(gcnew ParameterizedThreadStart(this, &FormMain::threadStart));
+		thread_->Start(allToDel);
 	}
 
 	static String^ trans(System::Text::RegularExpressions::Match^ m)
@@ -232,10 +273,38 @@ namespace delfols {
 		}
 
 	}
-
-
+	System::Void FormMain::FormMain_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e)
+	{
+		if(thread_ && thread_->IsAlive)
+		{
+			thread_->Suspend();
+			if(System::Windows::Forms::DialogResult::Yes != CppUtils::CenteredMessageBox(
+				this,
+				TOI18NS(L"Are you sure to close?"),
+				Application::ProductName,
+				MessageBoxButtons::YesNo,
+				MessageBoxIcon::Question))
+			{
+				e->Cancel = true;
+				thread_->Resume();
+				return;
+			}
+			// no easy method to terminate thread, I dont want to write messy thread codes.
+			Environment::Exit(0);
+			//thread_->Abort();
+			//delete thread_;
+			//thread_=nullptr;
+		}
+	}
+	delegate void LogDelegate(String^ filename, bool ok, String^ desc);
 	void FormMain::addToLog(String^ filename, bool ok, String^ desc)
 	{
+		if(InvokeRequired)
+		{
+			BeginInvoke(gcnew LogDelegate(this, &FormMain::addToLog),
+				filename,ok,desc);
+			return;
+		}
 		int count = lvLog->Items->Count + 1;
 		ListViewItem^ item = gcnew ListViewItem();
 		item->Text = count.ToString();
@@ -243,6 +312,7 @@ namespace delfols {
 		item->SubItems->Add(ok ? L"OK" : desc);
 
 		lvLog->Items->Add(item);
+		lvLog->EnsureVisible(lvLog->Items->IndexOf(item));
 	}
 	void FormMain::theDeleteFile(String^ path)
 	{

@@ -4,10 +4,12 @@
 namespace delfols {
 	using namespace System;
 	using namespace System::Windows::Forms;
+	using namespace Ambiesoft;
 
 	void ShowErrorMessage(Form^ win, String^ s)
 	{
-		Ambiesoft::CenteredMessageBox::Show(win,
+		CppUtils::CenteredMessageBox(
+			win,
 			s,
 			Application::ProductName,
 			MessageBoxButtons::OK,
