@@ -20,6 +20,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <UseDebugLibraries>false</UseDebugLibraries>
     <CLRSupport>true</CLRSupport>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
@@ -27,6 +28,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <UseDebugLibraries>true</UseDebugLibraries>
     <CLRSupport>true</CLRSupport>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -97,11 +99,11 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Reference Include="Ambiesoft.AmbLibcpp">
+      <HintPath>..\..\..\..\..\..\Linkout\DNAssembly.NET4\Ambiesoft.AmbLibcpp.dll</HintPath>
+    </Reference>
     <Reference Include="Ambiesoft.Profile">
       <HintPath>..\..\..\..\..\..\Linkout\DNAssembly\Ambiesoft.Profile.dll</HintPath>
-    </Reference>
-    <Reference Include="CenterWinDialog">
-      <HintPath>..\..\..\..\..\..\Linkout\DNAssembly\CenterWinDialog.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
@@ -125,8 +127,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\MyUtility\getStdString.net.cpp" />
-    <ClCompile Include="..\..\MyUtility\StartProcess.cpp" />
+    <ClCompile Include="..\..\lsMisc\getStdString.net.cpp" />
+    <ClCompile Include="..\..\lsMisc\StartProcess.cpp" />
     <ClCompile Include="..\delfols\AssemblyInfo.cpp" />
     <ClCompile Include="..\delfols\delfols.cpp" />
     <ClCompile Include="..\delfols\FormMain.cpp" />
@@ -143,8 +145,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\MyUtility\getStdString.net.h" />
-    <ClInclude Include="..\..\MyUtility\StartProcess.h" />
+    <ClInclude Include="..\..\lsMisc\getStdString.net.h" />
+    <ClInclude Include="..\..\lsMisc\StartProcess.h" />
     <ClInclude Include="..\delfols\FormMain.h">
       <FileType>CppForm</FileType>
     </ClInclude>

@@ -1,9 +1,14 @@
 #include "stdafx.h"
+
+#include <vcclr.h>
+
+#include "../../lsMisc/SHMoveFile.h"
+
 #include "FormMain.h"
 #include "helper.h"
 #include "noStdafxHelper.h"
-#include "../../lsMisc/getStdString.net.h"
-#include "../../lsMisc/StartProcess.h"
+#include "ThreadParam.h"
+#include "StartDeleteDialog.h"
 
 // thread suspend and resume
 #pragma warning(disable:4947)
@@ -51,9 +56,9 @@ namespace delfols {
 		String^ s = System::Environment::GetFolderPath(System::Environment::SpecialFolder::LocalApplicationData);
 	}
 
-	void FormMain::deleteAll(DirectoryInfo^ di)
+	void FormMain::deleteAll(ThreadParam ^tp, DirectoryInfo^ di)
 	{
-		array<DirectoryInfo^>^ subdirs = nullptr;
+		cli::array<DirectoryInfo^>^ subdirs = nullptr;
 		try
 		{
 			subdirs = di->GetDirectories();
@@ -68,21 +73,21 @@ namespace delfols {
 		{
 			if ((subdir->Attributes & System::IO::FileAttributes::ReparsePoint)==System::IO::FileAttributes::ReparsePoint)
 			{
-				theDeleteDir(subdir->FullName);
+				theDeleteDir(tp, subdir->FullName);
 				continue;
 			}
 			
-			deleteAll(subdir);
-			theDeleteDir(subdir->FullName);
+			deleteAll(tp, subdir);
+			theDeleteDir(tp, subdir->FullName);
 		}
 
-		array<FileInfo^>^ files = di->GetFiles();
+		cli::array<FileInfo^>^ files = di->GetFiles();
 		for each(FileInfo^ f in files)
 		{
 			try
 			{
 				String^ full = f->FullName;
-				theDeleteFile(full);
+				theDeleteFile(tp, full);
 			}
 			catch(System::Exception^ ex)
 			{
@@ -97,19 +102,27 @@ namespace delfols {
 	}
 	bool FormMain::OnThreadEnded()
 	{
+		CppUtils::CenteredMessageBox(
+			this,
+			TOI18NS(L"Completed"),
+			Application::ProductName,
+			MessageBoxButtons::OK,
+			MessageBoxIcon::Information);
 		return true;
 	}
 
 	void FormMain::threadStart(Object^ obj)
 	{
+		ThreadParam^ tp = (ThreadParam^)obj;
+
 		BeginInvoke(gcnew BVDelegate(this,&FormMain::OnThreadStarted));
 
-		List<String^>^ allToDel = (List<String^>^)obj;
-		for each(String^ path in allToDel)
+
+		for each(String^ path in tp->AllToDel)
 		{
 			if(File::Exists(path))
 			{
-				theDeleteFile(path);
+				theDeleteFile(tp, path);
 				continue;
 			}
 
@@ -117,36 +130,37 @@ namespace delfols {
 				continue;
 
 			DirectoryInfo^ di = gcnew DirectoryInfo(path);
-			deleteAll(di);
+			deleteAll(tp, di);
 
 			if(!path->EndsWith(L"\\"))
 			{
-				theDeleteDir(di->FullName);
+				theDeleteDir(tp, di->FullName);
 			}
 		}
 		BeginInvoke(gcnew BVDelegate(this,&FormMain::OnThreadEnded));
 	}
 
+
 	System::Void FormMain::tbExecute_Click(System::Object^  sender, System::EventArgs^  e)
 	{
-		if(thread_)
-		{
-			if(thread_->IsAlive)
-				return;
-			delete thread_;
-			thread_=nullptr;
-		}
-
-		if(System::Windows::Forms::DialogResult::Yes != CppUtils::CenteredMessageBox(
-			this,
-			TOI18NS(L"Are you sure to delete files and folders on the list?"),
-			Application::ProductName,
-			MessageBoxButtons::YesNo,
-			MessageBoxIcon::Question))
+		if (!checkThreadCanContinue(TOI18NS(L"stop current operation")))
 		{
 			return;
 		}
 
+		//if(System::Windows::Forms::DialogResult::Yes != CppUtils::CenteredMessageBox(
+		//	this,
+		//	TOI18NS(L"Are you sure to delete files and folders on the list?"),
+		//	Application::ProductName,
+		//	MessageBoxButtons::YesNo,
+		//	MessageBoxIcon::Question))
+		//{
+		//	return;
+		//}
+		StartDeleteDialog dlg;
+		if (System::Windows::Forms::DialogResult::OK != dlg.ShowDialog())
+			return;
+		
 		lvLog->Items->Clear();
 
 		List<String^>^ allToDel = gcnew List<String^>();
@@ -173,7 +187,8 @@ namespace delfols {
 		}
 
 		thread_ = gcnew Thread(gcnew ParameterizedThreadStart(this, &FormMain::threadStart));
-		thread_->Start(allToDel);
+		thread_->IsBackground = true;
+		thread_->Start(gcnew ThreadParam(dlg.IsDryrun, dlg.IsShellDelete, allToDel));
 	}
 
 	static String^ trans(System::Text::RegularExpressions::Match^ m)
@@ -206,10 +221,10 @@ namespace delfols {
 		{
 			throw gcnew System::Exception();
 		}
-		ret = ret->TrimEnd(gcnew array<System::Char>{L'\\'});
+		ret = ret->TrimEnd(gcnew cli::array<System::Char>{L'\\'});
 		return ret;
 	}
-	void FormMain::SetPath(array<String^>^ paths)
+	void FormMain::SetPath(cli::array<String^>^ paths)
 	{
 		lvMain->Items->Clear();
 		if(!paths)
@@ -251,7 +266,7 @@ namespace delfols {
 
 	System::Void FormMain::FormMain_Load(System::Object^  sender, System::EventArgs^  e)
 	{
-		array<String^>^ paths;
+		cli::array<String^>^ paths;
 		String^ confpath = Path::Combine(System::IO::Path::GetDirectoryName(Application::ExecutablePath), L"config.ini");
 		if(File::Exists(confpath))
 		{
@@ -273,27 +288,39 @@ namespace delfols {
 		}
 
 	}
-	System::Void FormMain::FormMain_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e)
+	bool FormMain::checkThreadCanContinue(String^ message)
 	{
-		if(thread_ && thread_->IsAlive)
+		if (thread_ && thread_->IsAlive)
 		{
 			thread_->Suspend();
-			if(System::Windows::Forms::DialogResult::Yes != CppUtils::CenteredMessageBox(
+			if (System::Windows::Forms::DialogResult::Yes != CppUtils::CenteredMessageBox(
 				this,
-				TOI18NS(L"Are you sure to close?"),
+				String::Format(
+					TOI18NS(L"Thread is still running. Are you sure to {0}?"),
+					message),
 				Application::ProductName,
 				MessageBoxButtons::YesNo,
 				MessageBoxIcon::Question))
 			{
-				e->Cancel = true;
+				// User said NO, so continu thread cancel current operation
 				thread_->Resume();
-				return;
+				return false;
 			}
-			// no easy method to terminate thread, I dont want to write messy thread codes.
-			Environment::Exit(0);
-			//thread_->Abort();
-			//delete thread_;
-			//thread_=nullptr;
+			// User said YES, delete thread and continue user operation
+			delete thread_;
+			thread_=nullptr;
+			return true;
+		}
+
+		// No threads, user operation can continue
+		return true;
+	}
+	System::Void FormMain::FormMain_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e)
+	{
+		if (!checkThreadCanContinue(TOI18NS(L"close")))
+		{
+			e->Cancel = true;
+			return;
 		}
 	}
 	delegate void LogDelegate(String^ filename, bool ok, String^ desc);
@@ -309,12 +336,12 @@ namespace delfols {
 		ListViewItem^ item = gcnew ListViewItem();
 		item->Text = count.ToString();
 		item->SubItems->Add(filename);
-		item->SubItems->Add(ok ? L"OK" : desc);
+		item->SubItems->Add((ok ? L"OK" : L"NG") + L" (" + desc + L")");
 
 		lvLog->Items->Add(item);
 		lvLog->EnsureVisible(lvLog->Items->IndexOf(item));
 	}
-	void FormMain::theDeleteFile(String^ path)
+	void FormMain::theDeleteFile(ThreadParam ^tp, String^ path)
 	{
 		if(!path || path->Length < 3 || path[1] != L':' || path[2] != L'\\')
 		{
@@ -324,8 +351,24 @@ namespace delfols {
 
 		try
 		{
-			File::Delete(path);
-			addToLog(path, true, L"");
+			if (tp->IsDryrun)
+			{
+				addToLog(path, true, L"Dryrun File");
+			}
+			else if (tp->IsShellDelete)
+			{
+				pin_ptr<const wchar_t> pPath = PtrToStringChars(path);
+				int ret;
+				bool bOK = !!SHDeleteFile(pPath, 
+					FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT, 
+					&ret);
+				addToLog(path, bOK, gcnew String(GetSHFileOpErrorString(ret).c_str()));
+			}
+			else
+			{
+				File::Delete(path);
+				addToLog(path, true, L"");
+			}
 		}
 		catch(System::Exception^ ex)
 		{
@@ -333,7 +376,7 @@ namespace delfols {
 		}
 	}
 	
-	void FormMain::theDeleteDir(String^ path)
+	void FormMain::theDeleteDir(ThreadParam ^tp, String^ path)
 	{
 		if(!path || path->Length < 3 || path[1] != L':' || path[2] != L'\\')
 		{
@@ -343,8 +386,24 @@ namespace delfols {
 
 		try
 		{
-			Directory::Delete(path);
-			addToLog(path, true, L"");
+			if (tp->IsDryrun)
+			{
+				addToLog(path, true, L"Dryrun Directory");
+			}
+			else if (tp->IsShellDelete)
+			{
+				pin_ptr<const wchar_t> pPath = PtrToStringChars(path);
+				int ret;
+				bool bOK = !!SHDeleteFile(pPath, 
+					FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT,
+					&ret);
+				addToLog(path, bOK, gcnew String(GetSHFileOpErrorString(ret).c_str()));
+			}
+			else
+			{
+				Directory::Delete(path);
+				addToLog(path, true, L"");
+			}
 		}
 		catch(System::Exception^ ex)
 		{
@@ -357,11 +416,8 @@ namespace delfols {
 
 	System::Void FormMain::tbAsAdmin_Click(System::Object^  sender, System::EventArgs^  e)
 	{
-		//std::wstring app = Ambiesoft::getStdWstring(System::Environment::CommandLine);
-		//if(!StartProcess(app.c_str()))
-		//{
-		//	ShowErrorMessage(TOI18NS(L"Failed : Process start"));
-		//}
+		if (!checkThreadCanContinue(TOI18NS(L"stop")))
+			return;
 
 		try
 		{

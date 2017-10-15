@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ThreadParam.h"
 
 namespace delfols {
 
@@ -202,13 +203,14 @@ namespace delfols {
 		System::Threading::Thread^ thread_;
 	private:
 		void SetPath(array<String^>^ paths);
-		void deleteAll(DirectoryInfo^ di);
-		void theDeleteFile(String^ path);
-		void theDeleteDir(String^ path);
+		void deleteAll(ThreadParam ^tp, DirectoryInfo^ di);
+		void theDeleteFile(ThreadParam ^tp, String^ path);
+		void theDeleteDir(ThreadParam ^tp, String^ path);
 		void addToLog(String^ filename, bool ok, String^ desc);
 		void threadStart(Object^ obj);
 		bool OnThreadStarted();
 		bool OnThreadEnded();
+		bool checkThreadCanContinue(String^ message);
 	private:
 		System::Void tbAdd_Click(System::Object^  sender, System::EventArgs^  e);
 		System::Void FormMain_Load(System::Object^  sender, System::EventArgs^  e);

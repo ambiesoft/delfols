@@ -2,3 +2,10 @@ Debug/
 *.suo
 *.ncb
 *.user
+
+2013/Release/
+2013/delfols.sdf
+2013/ipch/
+2017/.vs/
+2017/Release/
+

@@ -252,6 +252,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\delfols\StartDeleteDialog.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\lsMisc\StartProcess.cpp"
 				>
 			</File>
@@ -274,6 +278,10 @@
 						UsePrecompiledHeader="1"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\delfols\ThreadParam.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
@@ -308,11 +316,28 @@
 				>
 			</File>
 			<File
+				RelativePath="..\delfols\StartDeleteDialog.h"
+				FileType="3"
+				>
+					<File
+				RelativePath="..\delfols\StartDeleteDialog.resx"
+				SubType="Designer"
+				>
+			</File>
+				
+				
+				
+			</File>
+			<File
 				RelativePath="..\..\lsMisc\StartProcess.h"
 				>
 			</File>
 			<File
 				RelativePath="..\delfols\stdafx.h"
+				>
+			</File>
+			<File
+				RelativePath="..\delfols\ThreadParam.h"
 				>
 			</File>
 		</Filter>
@@ -329,6 +354,7 @@
 				RelativePath="..\delfols\app.rc"
 				>
 			</File>
+		
 		</Filter>
 		<File
 			RelativePath="..\delfols\config.ini"
