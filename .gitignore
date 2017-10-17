@@ -3,6 +3,8 @@ Debug/
 *.ncb
 *.user
 
+2010/Release/
+2010/delfols.sdf
 2013/Release/
 2013/delfols.sdf
 2013/ipch/
