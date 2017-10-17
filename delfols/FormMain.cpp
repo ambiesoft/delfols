@@ -188,6 +188,8 @@ namespace delfols {
 
 		thread_ = gcnew Thread(gcnew ParameterizedThreadStart(this, &FormMain::threadStart));
 		thread_->IsBackground = true;
+		if(dlg.IsDryrun)
+			thread_->Priority = ThreadPriority::Lowest;
 		thread_->Start(gcnew ThreadParam(dlg.IsDryrun, dlg.IsShellDelete, allToDel));
 	}
 
@@ -339,7 +341,7 @@ namespace delfols {
 		item->SubItems->Add((ok ? L"OK" : L"NG") + L" (" + desc + L")");
 
 		lvLog->Items->Add(item);
-		lvLog->EnsureVisible(lvLog->Items->IndexOf(item));
+		// lvLog->EnsureVisible(lvLog->Items->IndexOf(item));
 	}
 	void FormMain::theDeleteFile(ThreadParam ^tp, String^ path)
 	{
