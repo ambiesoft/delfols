@@ -45,6 +45,9 @@
     <ClCompile Include="..\..\lsMisc\GetLastErrorString.cpp">
       <Filter>2 Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\delfols\StartDeleteDialog.cpp">
+      <Filter>2 Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\delfols\FormMain.h">
@@ -72,6 +75,12 @@
       <Filter>1 Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\lsMisc\GetLastErrorString.h">
+      <Filter>1 Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\delfols\LogInfo.h">
+      <Filter>1 Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\delfols\StartDeleteDialog.h">
       <Filter>1 Header</Filter>
     </ClInclude>
   </ItemGroup>

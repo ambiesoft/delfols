@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ThreadParam.h"
+#include "LogInfo.h"
 
 namespace delfols {
 
@@ -13,6 +14,10 @@ namespace delfols {
 
 	public ref class FormMain : public System::Windows::Forms::Form
 	{
+	public:
+		System::Collections::Generic::List<LogInfo^> logInfos_;
+		System::Collections::Generic::List<ListViewItem^> logCache_;
+
 	public:
 		FormMain(void);
 
@@ -29,7 +34,8 @@ namespace delfols {
 
 	protected: 
 	private: System::Windows::Forms::ColumnHeader^  chEntry;
-	private: System::Windows::Forms::ColumnHeader^  chActualPass;
+	private: System::Windows::Forms::ColumnHeader^  chActualPath;
+
 	private: System::Windows::Forms::ToolStrip^  toolMain;
 	private: System::Windows::Forms::ToolStripButton^  tbAdd;
 	private: System::Windows::Forms::ToolStripButton^  tbExecute;
@@ -55,7 +61,7 @@ namespace delfols {
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(FormMain::typeid));
 			this->lvMain = (gcnew System::Windows::Forms::ListView());
 			this->chEntry = (gcnew System::Windows::Forms::ColumnHeader());
-			this->chActualPass = (gcnew System::Windows::Forms::ColumnHeader());
+			this->chActualPath = (gcnew System::Windows::Forms::ColumnHeader());
 			this->toolMain = (gcnew System::Windows::Forms::ToolStrip());
 			this->tbAdd = (gcnew System::Windows::Forms::ToolStripButton());
 			this->tbExecute = (gcnew System::Windows::Forms::ToolStripButton());
@@ -74,7 +80,7 @@ namespace delfols {
 			// 
 			// lvMain
 			// 
-			this->lvMain->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(2) {this->chEntry, this->chActualPass});
+			this->lvMain->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(2) {this->chEntry, this->chActualPath});
 			this->lvMain->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->lvMain->Location = System::Drawing::Point(0, 25);
 			this->lvMain->Name = L"lvMain";
@@ -88,10 +94,10 @@ namespace delfols {
 			this->chEntry->Text = L"Entry";
 			this->chEntry->Width = 271;
 			// 
-			// chActualPass
+			// chActualPath
 			// 
-			this->chActualPass->Text = L"Pass";
-			this->chActualPass->Width = 320;
+			this->chActualPath->Text = L"Actual Path";
+			this->chActualPath->Width = 320;
 			// 
 			// toolMain
 			// 
@@ -118,7 +124,7 @@ namespace delfols {
 			this->tbExecute->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tbExecute.Image")));
 			this->tbExecute->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->tbExecute->Name = L"tbExecute";
-			this->tbExecute->Size = System::Drawing::Size(73, 22);
+			this->tbExecute->Size = System::Drawing::Size(67, 22);
 			this->tbExecute->Text = L"Execute";
 			this->tbExecute->Click += gcnew System::EventHandler(this, &FormMain::tbExecute_Click);
 			// 
@@ -127,7 +133,7 @@ namespace delfols {
 			this->tbAsAdmin->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tbAsAdmin.Image")));
 			this->tbAsAdmin->ImageTransparentColor = System::Drawing::Color::Magenta;
 			this->tbAsAdmin->Name = L"tbAsAdmin";
-			this->tbAsAdmin->Size = System::Drawing::Size(82, 22);
+			this->tbAsAdmin->Size = System::Drawing::Size(79, 22);
 			this->tbAsAdmin->Text = L"As Admin";
 			this->tbAsAdmin->ToolTipText = L"As Admin";
 			this->tbAsAdmin->Click += gcnew System::EventHandler(this, &FormMain::tbAsAdmin_Click);
@@ -162,6 +168,9 @@ namespace delfols {
 			this->lvLog->TabIndex = 0;
 			this->lvLog->UseCompatibleStateImageBehavior = false;
 			this->lvLog->View = System::Windows::Forms::View::Details;
+			this->lvLog->VirtualMode = true;
+			this->lvLog->CacheVirtualItems += gcnew System::Windows::Forms::CacheVirtualItemsEventHandler(this, &FormMain::lvLog_CacheVirtualItems);
+			this->lvLog->RetrieveVirtualItem += gcnew System::Windows::Forms::RetrieveVirtualItemEventHandler(this, &FormMain::lvLog_RetrieveVirtualItem);
 			// 
 			// chNo
 			// 
@@ -201,12 +210,16 @@ namespace delfols {
 	private:
 		delegate bool BVDelegate();
 		System::Threading::Thread^ thread_;
+		System::Collections::Generic::List<LogInfo^> sendCache_;
+
 	private:
 		void SetPath(array<String^>^ paths);
 		void deleteAll(ThreadParam ^tp, DirectoryInfo^ di);
 		void theDeleteFile(ThreadParam ^tp, String^ path);
 		void theDeleteDir(ThreadParam ^tp, String^ path);
 		void addToLog(String^ filename, bool ok, String^ desc);
+		void addToLogMain();
+		void addToLogEnd();
 		void threadStart(Object^ obj);
 		bool OnThreadStarted();
 		bool OnThreadEnded();
@@ -217,7 +230,9 @@ namespace delfols {
 		System::Void tbExecute_Click(System::Object^  sender, System::EventArgs^  e);
 		System::Void tbAsAdmin_Click(System::Object^  sender, System::EventArgs^  e);
 		System::Void FormMain_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e);
-		 
+		System::Void lvLog_RetrieveVirtualItem(System::Object^  sender, System::Windows::Forms::RetrieveVirtualItemEventArgs^  e);
+		System::Void lvLog_CacheVirtualItems(System::Object^  sender, System::Windows::Forms::CacheVirtualItemsEventArgs^  e);
+
 };
 
 

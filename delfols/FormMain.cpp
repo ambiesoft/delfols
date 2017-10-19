@@ -25,31 +25,6 @@ namespace delfols {
 		InitializeComponent();
 		String^ inipath = Path::Combine(System::IO::Path::GetDirectoryName(Application::ExecutablePath), Application::ProductName + L".ini");
 	}
-	
-
-
-//System::Void FormMain::clbMain_DragEnter(System::Object^  sender, System::Windows::Forms::DragEventArgs^  e)
-//{
-//	if (e->Data->GetDataPresent(DataFormats::FileDrop, true) )
-//	{
-//		e->Effect = DragDropEffects::Copy;
-//	}
-//}
-//
-//System::Void FormMain::clbMain_DragDrop(System::Object^  sender, System::Windows::Forms::DragEventArgs^  e)
-//{
-//	if (e->Data->GetDataPresent(DataFormats::FileDrop, true) )
-//	{
-//		array<Object^>^ os = (array<Object^>^)e->Data->GetData(DataFormats::FileDrop, true);
-//		for each(Object^ o in os)
-//		{
-//			if(System::IO::Directory::Exists(o->ToString()))
-//			{
-//				clbMain->Items->Add(o->ToString(), true);
-//			}
-//		}
-//	}
-//}
 
 	System::Void FormMain::tbAdd_Click(System::Object^  sender, System::EventArgs^  e)
 	{
@@ -63,7 +38,7 @@ namespace delfols {
 		{
 			subdirs = di->GetDirectories();
 		}
-		catch(System::Exception^ ex)
+		catch (System::Exception^ ex)
 		{
 			addToLog(di->FullName, false, ex->Message);
 			return;
@@ -71,12 +46,12 @@ namespace delfols {
 
 		for each(DirectoryInfo^ subdir in subdirs)
 		{
-			if ((subdir->Attributes & System::IO::FileAttributes::ReparsePoint)==System::IO::FileAttributes::ReparsePoint)
+			if ((subdir->Attributes & System::IO::FileAttributes::ReparsePoint) == System::IO::FileAttributes::ReparsePoint)
 			{
 				theDeleteDir(tp, subdir->FullName);
 				continue;
 			}
-			
+
 			deleteAll(tp, subdir);
 			theDeleteDir(tp, subdir->FullName);
 		}
@@ -89,13 +64,13 @@ namespace delfols {
 				String^ full = f->FullName;
 				theDeleteFile(tp, full);
 			}
-			catch(System::Exception^ ex)
+			catch (System::Exception^ ex)
 			{
 				addToLog(di->FullName, false, ex->Message);
 			}
 		}
 	}
-	
+
 	bool FormMain::OnThreadStarted()
 	{
 		return true;
@@ -115,29 +90,30 @@ namespace delfols {
 	{
 		ThreadParam^ tp = (ThreadParam^)obj;
 
-		BeginInvoke(gcnew BVDelegate(this,&FormMain::OnThreadStarted));
+		BeginInvoke(gcnew BVDelegate(this, &FormMain::OnThreadStarted));
 
 
 		for each(String^ path in tp->AllToDel)
 		{
-			if(File::Exists(path))
+			if (File::Exists(path))
 			{
 				theDeleteFile(tp, path);
 				continue;
 			}
 
-			if(!Directory::Exists(path))
+			if (!Directory::Exists(path))
 				continue;
 
 			DirectoryInfo^ di = gcnew DirectoryInfo(path);
 			deleteAll(tp, di);
 
-			if(!path->EndsWith(L"\\"))
+			if (!path->EndsWith(L"\\"))
 			{
 				theDeleteDir(tp, di->FullName);
 			}
 		}
-		BeginInvoke(gcnew BVDelegate(this,&FormMain::OnThreadEnded));
+		addToLogEnd();
+		BeginInvoke(gcnew BVDelegate(this, &FormMain::OnThreadEnded));
 	}
 
 
@@ -160,8 +136,9 @@ namespace delfols {
 		StartDeleteDialog dlg;
 		if (System::Windows::Forms::DialogResult::OK != dlg.ShowDialog())
 			return;
-		
-		lvLog->Items->Clear();
+
+		logInfos_.Clear();
+		lvLog->VirtualListSize = 0;
 
 		List<String^>^ allToDel = gcnew List<String^>();
 
@@ -172,15 +149,15 @@ namespace delfols {
 			{
 				path = item->SubItems[1]->Text;
 			}
-			catch(System::Exception^)
+			catch (System::Exception^)
 			{
 				continue;
 			}
 
-			if(!path || path->Length < 3)
+			if (!path || path->Length < 3)
 				continue;
 
-			if(path[1] != L':' || path[2] != L'\\')
+			if (path[1] != L':' || path[2] != L'\\')
 				continue;
 
 			allToDel->Add(path);
@@ -188,35 +165,74 @@ namespace delfols {
 
 		thread_ = gcnew Thread(gcnew ParameterizedThreadStart(this, &FormMain::threadStart));
 		thread_->IsBackground = true;
-		if(dlg.IsDryrun)
+		if (dlg.IsDryrun)
 			thread_->Priority = ThreadPriority::Lowest;
 		thread_->Start(gcnew ThreadParam(dlg.IsDryrun, dlg.IsShellDelete, allToDel));
 	}
+	System::Void FormMain::lvLog_RetrieveVirtualItem(System::Object^  sender, System::Windows::Forms::RetrieveVirtualItemEventArgs^  e)
+	{
+		if (logCache_.Count <= e->ItemIndex)
+		{
+			// not in cache
+			ListViewItem^ ret = gcnew ListViewItem();
+			ret->Text = (e->ItemIndex + 1).ToString();
+			LogInfo^ info = logInfos_[e->ItemIndex];
+			ret->SubItems->Add(info->Filename);
+			ret->SubItems->Add(info->Result);
+			e->Item = ret;
+		}
+		else
+		{
+			e->Item = logCache_[e->ItemIndex];
+		}
+		DASSERT(e->Item);
+	}
+	System::Void FormMain::lvLog_CacheVirtualItems(System::Object^  sender, System::Windows::Forms::CacheVirtualItemsEventArgs^  e)
+	{
+		// IF count = 2, e->EndIndex = 5,
+		// It needs start from index 2 to 5
+		//
+		// IF count = 4, e->EndIndex = 5 
+		// it needs start from index 5 to 5
+		//
+		// IF count = 0, e->EndIndex = 0,
+		// it needs start from index 0 to 0
+		// int iStart = logCache_.Count == 0 ? 0 : e->EndIndex - logCache_.Count - 1;
+		for (int i = logCache_.Count; i <= e->EndIndex; ++i)
+		{
+			ListViewItem^ item = gcnew ListViewItem();
+			item->Text = (i + 1).ToString();
+			LogInfo^ info = logInfos_[i];
+			item->SubItems->Add(info->Filename);
+			item->SubItems->Add(info->Result);
 
+			logCache_.Add(item);
+		}
+	}
 	static String^ trans(System::Text::RegularExpressions::Match^ m)
 	{
 		String^ ret = String::Empty;
-        String^ x = m->ToString();
+		String^ x = m->ToString();
 
-		if(x == L"${$}")
+		if (x == L"${$}")
 		{
 			ret = L"$";
 		}
-		else if(x == L"${LocalApplicationData}")
+		else if (x == L"${LocalApplicationData}")
 		{
 			ret = System::Environment::GetFolderPath(System::Environment::SpecialFolder::LocalApplicationData);
 		}
-		else if(x == L"${InternetCache}")
+		else if (x == L"${InternetCache}")
 		{
 			ret = System::Environment::GetFolderPath(System::Environment::SpecialFolder::InternetCache);
 		}
-		else if(x == L"${Recent}")
+		else if (x == L"${Recent}")
 		{
 			ret = System::Environment::GetFolderPath(System::Environment::SpecialFolder::Recent);
 		}
-		else if(x->StartsWith(L"${%"))
+		else if (x->StartsWith(L"${%"))
 		{
-			String^ envval = x->Substring(3,x->Length-5);
+			String^ envval = x->Substring(3, x->Length - 5);
 			ret = myGetEnvironmentVariable(envval);
 		}
 		else
@@ -229,7 +245,7 @@ namespace delfols {
 	void FormMain::SetPath(cli::array<String^>^ paths)
 	{
 		lvMain->Items->Clear();
-		if(!paths)
+		if (!paths)
 			return;
 
 		for each(String^ path in paths)
@@ -240,27 +256,28 @@ namespace delfols {
 			String^ actualpath = L"";
 			try
 			{
-				actualpath = System::Text::RegularExpressions::Regex::Replace(path, L"\\${.*}", 
+				actualpath = System::Text::RegularExpressions::Regex::Replace(path, L"\\${.*}",
 					gcnew System::Text::RegularExpressions::MatchEvaluator(trans));
-				
-				if(actualpath)
+
+				if (actualpath)
 				{
-					if(File::Exists(actualpath))
+					if (File::Exists(actualpath))
 					{
 						FileInfo fi(actualpath);
 						actualpath = fi.FullName;
 						item->SubItems->Add(actualpath);
 					}
-					else if(Directory::Exists(actualpath))
+					else if (Directory::Exists(actualpath))
 					{
 						DirectoryInfo di(actualpath);
 						actualpath = di.FullName;
 						item->SubItems->Add(actualpath);
 					}
-				}	
+				}
 			}
-			catch(System::Exception^)
-			{}
+			catch (System::Exception^)
+			{
+			}
 
 			lvMain->Items->Add(item);
 		}
@@ -270,7 +287,7 @@ namespace delfols {
 	{
 		cli::array<String^>^ paths;
 		String^ confpath = Path::Combine(System::IO::Path::GetDirectoryName(Application::ExecutablePath), L"config.ini");
-		if(File::Exists(confpath))
+		if (File::Exists(confpath))
 		{
 			//Ambiesoft::WProfiler::HashIni^ ini = Ambiesoft::WProfiler::WProfile::ReadAll(confpath, true);
 			Ambiesoft::HashIni^ ini = Ambiesoft::Profile::ReadAll(confpath, true);
@@ -279,7 +296,7 @@ namespace delfols {
 
 		SetPath(paths);
 
-		if(IsUserAnAdmin())
+		if (IsUserAnAdmin())
 		{
 			this->Text += L" " + TOI18NS(L"(Admin)");
 			tbAsAdmin->Visible = false;
@@ -298,8 +315,8 @@ namespace delfols {
 			if (System::Windows::Forms::DialogResult::Yes != CppUtils::CenteredMessageBox(
 				this,
 				String::Format(
-					TOI18NS(L"Thread is still running. Are you sure to {0}?"),
-					message),
+				TOI18NS(L"Thread is still running. Are you sure to {0}?"),
+				message),
 				Application::ProductName,
 				MessageBoxButtons::YesNo,
 				MessageBoxIcon::Question))
@@ -310,7 +327,7 @@ namespace delfols {
 			}
 			// User said YES, delete thread and continue user operation
 			delete thread_;
-			thread_=nullptr;
+			thread_ = nullptr;
 			return true;
 		}
 
@@ -325,27 +342,49 @@ namespace delfols {
 			return;
 		}
 	}
-	delegate void LogDelegate(String^ filename, bool ok, String^ desc);
+	delegate void LogDelegate();
+	void FormMain::addToLogMain()
+	{
+		DASSERT(!InvokeRequired);
+		DTRACE(sendCache_.Count);
+		logInfos_.AddRange(sendCache_.ToArray());
+		sendCache_.Clear();
+		lvLog->VirtualListSize = logInfos_.Count;
+	}
 	void FormMain::addToLog(String^ filename, bool ok, String^ desc)
 	{
-		if(InvokeRequired)
-		{
-			BeginInvoke(gcnew LogDelegate(this, &FormMain::addToLog),
-				filename,ok,desc);
-			return;
-		}
-		int count = lvLog->Items->Count + 1;
-		ListViewItem^ item = gcnew ListViewItem();
-		item->Text = count.ToString();
-		item->SubItems->Add(filename);
-		item->SubItems->Add((ok ? L"OK" : L"NG") + L" (" + desc + L")");
+		// cache data for logging in sendCache_,
+		// each 100 millisec, it send to main thread.
 
-		lvLog->Items->Add(item);
-		// lvLog->EnsureVisible(lvLog->Items->IndexOf(item));
+		// must be in thread
+		DASSERT(InvokeRequired);
+
+		String^ result = (ok ? L"OK" : L"NG") + L" (" + desc + L")";
+		sendCache_.Add(gcnew LogInfo(filename, result));
+
+		static int slastTick;
+		int nowTick = Environment::TickCount;
+		if ((nowTick - slastTick) > 100)
+		{
+			IAsyncResult^ r = BeginInvoke(gcnew LogDelegate(this, &FormMain::addToLogMain));
+			EndInvoke(r);
+			slastTick = nowTick;
+		}
+
+		return;
+	}
+
+	void FormMain::addToLogEnd()
+	{
+		// send remnant sendCache_
+
+		DASSERT(InvokeRequired);
+		IAsyncResult^ r = BeginInvoke(gcnew LogDelegate(this, &FormMain::addToLogMain));
+		EndInvoke(r);
 	}
 	void FormMain::theDeleteFile(ThreadParam ^tp, String^ path)
 	{
-		if(!path || path->Length < 3 || path[1] != L':' || path[2] != L'\\')
+		if (!path || path->Length < 3 || path[1] != L':' || path[2] != L'\\')
 		{
 			addToLog(path, false, TOI18NS(L"Not Fullpath"));
 			return;
@@ -361,8 +400,8 @@ namespace delfols {
 			{
 				pin_ptr<const wchar_t> pPath = PtrToStringChars(path);
 				int ret;
-				bool bOK = !!SHDeleteFile(pPath, 
-					FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT, 
+				bool bOK = !!SHDeleteFile(pPath,
+					FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT,
 					&ret);
 				addToLog(path, bOK, gcnew String(GetSHFileOpErrorString(ret).c_str()));
 			}
@@ -372,15 +411,15 @@ namespace delfols {
 				addToLog(path, true, L"");
 			}
 		}
-		catch(System::Exception^ ex)
+		catch (System::Exception^ ex)
 		{
 			addToLog(path, false, ex->Message);
 		}
 	}
-	
+
 	void FormMain::theDeleteDir(ThreadParam ^tp, String^ path)
 	{
-		if(!path || path->Length < 3 || path[1] != L':' || path[2] != L'\\')
+		if (!path || path->Length < 3 || path[1] != L':' || path[2] != L'\\')
 		{
 			addToLog(path, false, TOI18NS(L"Not Fullpath"));
 			return;
@@ -396,7 +435,7 @@ namespace delfols {
 			{
 				pin_ptr<const wchar_t> pPath = PtrToStringChars(path);
 				int ret;
-				bool bOK = !!SHDeleteFile(pPath, 
+				bool bOK = !!SHDeleteFile(pPath,
 					FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT,
 					&ret);
 				addToLog(path, bOK, gcnew String(GetSHFileOpErrorString(ret).c_str()));
@@ -407,7 +446,7 @@ namespace delfols {
 				addToLog(path, true, L"");
 			}
 		}
-		catch(System::Exception^ ex)
+		catch (System::Exception^ ex)
 		{
 			addToLog(path, false, ex->Message);
 		}
@@ -428,7 +467,7 @@ namespace delfols {
 			Process::Start(%psi);
 			this->Close();
 		}
-		catch(Exception^ ex)
+		catch (Exception^ ex)
 		{
 			ShowErrorMessage(this, ex);
 		}

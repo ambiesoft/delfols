@@ -253,6 +253,7 @@
     </ClInclude>
     <ClInclude Include="..\..\lsMisc\getStdString.net.h" />
     <ClInclude Include="..\delfols\helper.h" />
+    <ClInclude Include="..\delfols\LogInfo.h" />
     <ClInclude Include="..\delfols\noStdafxHelper.h" />
     <ClInclude Include="..\delfols\resource.h" />
     <ClInclude Include="..\..\lsMisc\StartProcess.h" />

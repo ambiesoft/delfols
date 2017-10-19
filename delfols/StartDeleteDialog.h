@@ -65,9 +65,9 @@ namespace delfols {
 			// chkDryrun
 			// 
 			this->chkDryrun->AutoSize = true;
-			this->chkDryrun->Location = System::Drawing::Point(12, 12);
+			this->chkDryrun->Location = System::Drawing::Point(12, 13);
 			this->chkDryrun->Name = L"chkDryrun";
-			this->chkDryrun->Size = System::Drawing::Size(58, 16);
+			this->chkDryrun->Size = System::Drawing::Size(57, 17);
 			this->chkDryrun->TabIndex = 0;
 			this->chkDryrun->Text = L"&Dryrun";
 			this->chkDryrun->UseVisualStyleBackColor = true;
@@ -75,9 +75,9 @@ namespace delfols {
 			// chkShellDelete
 			// 
 			this->chkShellDelete->AutoSize = true;
-			this->chkShellDelete->Location = System::Drawing::Point(12, 34);
+			this->chkShellDelete->Location = System::Drawing::Point(12, 37);
 			this->chkShellDelete->Name = L"chkShellDelete";
-			this->chkShellDelete->Size = System::Drawing::Size(84, 16);
+			this->chkShellDelete->Size = System::Drawing::Size(81, 17);
 			this->chkShellDelete->TabIndex = 0;
 			this->chkShellDelete->Text = L"&Shell delete";
 			this->chkShellDelete->UseVisualStyleBackColor = true;
@@ -86,20 +86,20 @@ namespace delfols {
 			// 
 			this->btnOK->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
 			this->btnOK->DialogResult = System::Windows::Forms::DialogResult::OK;
-			this->btnOK->Location = System::Drawing::Point(116, 226);
+			this->btnOK->Location = System::Drawing::Point(144, 113);
 			this->btnOK->Name = L"btnOK";
-			this->btnOK->Size = System::Drawing::Size(75, 23);
+			this->btnOK->Size = System::Drawing::Size(218, 25);
 			this->btnOK->TabIndex = 1;
-			this->btnOK->Text = L"&OK";
+			this->btnOK->Text = L"&Delete Files on the list";
 			this->btnOK->UseVisualStyleBackColor = true;
 			// 
 			// btnCancel
 			// 
 			this->btnCancel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
 			this->btnCancel->DialogResult = System::Windows::Forms::DialogResult::Cancel;
-			this->btnCancel->Location = System::Drawing::Point(197, 226);
+			this->btnCancel->Location = System::Drawing::Point(368, 113);
 			this->btnCancel->Name = L"btnCancel";
-			this->btnCancel->Size = System::Drawing::Size(75, 23);
+			this->btnCancel->Size = System::Drawing::Size(75, 25);
 			this->btnCancel->TabIndex = 2;
 			this->btnCancel->Text = L"&Cancel";
 			this->btnCancel->UseVisualStyleBackColor = true;
@@ -107,16 +107,21 @@ namespace delfols {
 			// StartDeleteDialog
 			// 
 			this->AcceptButton = this->btnOK;
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->CancelButton = this->btnCancel;
-			this->ClientSize = System::Drawing::Size(284, 261);
+			this->ClientSize = System::Drawing::Size(455, 151);
 			this->Controls->Add(this->btnCancel);
 			this->Controls->Add(this->btnOK);
 			this->Controls->Add(this->chkShellDelete);
 			this->Controls->Add(this->chkDryrun);
+			this->MaximizeBox = false;
+			this->MinimizeBox = false;
 			this->Name = L"StartDeleteDialog";
-			this->Text = L"StartDeleteDialog";
+			this->ShowIcon = false;
+			this->ShowInTaskbar = false;
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
+			this->Text = L"Delete Files";
 			this->ResumeLayout(false);
 			this->PerformLayout();
 

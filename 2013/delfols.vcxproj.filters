@@ -86,6 +86,9 @@
     <ClInclude Include="..\..\lsMisc\GetLastErrorString.h">
       <Filter>1 Header</Filter>
     </ClInclude>
+    <ClInclude Include="..\delfols\LogInfo.h">
+      <Filter>1 Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\delfols\app.ico">
