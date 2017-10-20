@@ -14,6 +14,11 @@ namespace delfols {
 
 	public ref class FormMain : public System::Windows::Forms::Form
 	{
+		literal String^ SECTION_FORMPOS = L"FormPosition";
+		
+		literal String^ SECTION_LIST = L"List";
+		literal String^ KEY_MAIN_LIST = L"Main";
+
 	public:
 		System::Collections::Generic::List<LogInfo^> logInfos_;
 		System::Collections::Generic::List<ListViewItem^> logCache_;

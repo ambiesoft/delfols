@@ -14,16 +14,24 @@
 #pragma warning(disable:4947)
 
 namespace delfols {
+
+	using namespace System;
 	using namespace System::Diagnostics;
 	using namespace System::Threading;
 	using namespace System::Collections::Generic;
 	using namespace std;
 	using namespace Ambiesoft;
 
+
+
 	FormMain::FormMain(void)
 	{
 		InitializeComponent();
-		String^ inipath = Path::Combine(System::IO::Path::GetDirectoryName(Application::ExecutablePath), Application::ProductName + L".ini");
+		String^ inipath = AmbLib::GetIniPath();
+		HashIni^ ini = Profile::ReadAll(inipath);
+
+		AmbLib::LoadFormXYWH(this, SECTION_FORMPOS, ini);
+		AmbLib::LoadListViewColumnWidth(this->lvMain, SECTION_LIST, KEY_MAIN_LIST, ini);
 	}
 
 	System::Void FormMain::tbAdd_Click(System::Object^  sender, System::EventArgs^  e)
@@ -341,7 +349,20 @@ namespace delfols {
 			e->Cancel = true;
 			return;
 		}
+
+		// from here, no cancelling
+		String^ inipath = AmbLib::GetIniPath();
+		HashIni^ ini = Profile::ReadAll(inipath);
+
+		AmbLib::SaveListViewColumnWidth(this->lvMain, SECTION_LIST, KEY_MAIN_LIST, ini);
+
+		AmbLib::SaveFormXYWH(this, SECTION_FORMPOS, ini);
+		if (!Profile::WriteAll(ini, inipath))
+		{
+			CppUtils::Alert(this,TOI18NS(L"Failed to save to ini file."));
+		}
 	}
+
 	delegate void LogDelegate();
 	void FormMain::addToLogMain()
 	{
@@ -359,7 +380,10 @@ namespace delfols {
 		// must be in thread
 		DASSERT(InvokeRequired);
 
-		String^ result = (ok ? L"OK" : L"NG") + L" (" + desc + L")";
+		String^ result = (ok ? L"OK" : L"NG");
+		if (!String::IsNullOrEmpty(desc))
+			result += L" (" + desc + L")";
+
 		sendCache_.Add(gcnew LogInfo(filename, result));
 
 		static int slastTick;
@@ -399,11 +423,9 @@ namespace delfols {
 			else if (tp->IsShellDelete)
 			{
 				pin_ptr<const wchar_t> pPath = PtrToStringChars(path);
-				int ret;
-				bool bOK = !!SHDeleteFile(pPath,
-					FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT,
-					&ret);
-				addToLog(path, bOK, gcnew String(GetSHFileOpErrorString(ret).c_str()));
+
+				int ret = SHDeleteFile(pPath,FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT);
+				addToLog(path, ret==0, gcnew String(GetSHFileOpErrorString(ret).c_str()));
 			}
 			else
 			{
@@ -434,11 +456,8 @@ namespace delfols {
 			else if (tp->IsShellDelete)
 			{
 				pin_ptr<const wchar_t> pPath = PtrToStringChars(path);
-				int ret;
-				bool bOK = !!SHDeleteFile(pPath,
-					FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT,
-					&ret);
-				addToLog(path, bOK, gcnew String(GetSHFileOpErrorString(ret).c_str()));
+				int ret = SHDeleteFile(pPath, FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT);
+				addToLog(path, ret==0, gcnew String(GetSHFileOpErrorString(ret).c_str()));
 			}
 			else
 			{

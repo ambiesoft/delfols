@@ -65,17 +65,17 @@ namespace delfols {
 			// chkDryrun
 			// 
 			this->chkDryrun->AutoSize = true;
-			this->chkDryrun->Location = System::Drawing::Point(12, 13);
+			this->chkDryrun->Location = System::Drawing::Point(12, 99);
 			this->chkDryrun->Name = L"chkDryrun";
 			this->chkDryrun->Size = System::Drawing::Size(57, 17);
-			this->chkDryrun->TabIndex = 0;
+			this->chkDryrun->TabIndex = 1;
 			this->chkDryrun->Text = L"&Dryrun";
 			this->chkDryrun->UseVisualStyleBackColor = true;
 			// 
 			// chkShellDelete
 			// 
 			this->chkShellDelete->AutoSize = true;
-			this->chkShellDelete->Location = System::Drawing::Point(12, 37);
+			this->chkShellDelete->Location = System::Drawing::Point(12, 12);
 			this->chkShellDelete->Name = L"chkShellDelete";
 			this->chkShellDelete->Size = System::Drawing::Size(81, 17);
 			this->chkShellDelete->TabIndex = 0;
@@ -89,7 +89,7 @@ namespace delfols {
 			this->btnOK->Location = System::Drawing::Point(144, 113);
 			this->btnOK->Name = L"btnOK";
 			this->btnOK->Size = System::Drawing::Size(218, 25);
-			this->btnOK->TabIndex = 1;
+			this->btnOK->TabIndex = 2;
 			this->btnOK->Text = L"&Delete Files on the list";
 			this->btnOK->UseVisualStyleBackColor = true;
 			// 
@@ -100,7 +100,7 @@ namespace delfols {
 			this->btnCancel->Location = System::Drawing::Point(368, 113);
 			this->btnCancel->Name = L"btnCancel";
 			this->btnCancel->Size = System::Drawing::Size(75, 25);
-			this->btnCancel->TabIndex = 2;
+			this->btnCancel->TabIndex = 3;
 			this->btnCancel->Text = L"&Cancel";
 			this->btnCancel->UseVisualStyleBackColor = true;
 			// 

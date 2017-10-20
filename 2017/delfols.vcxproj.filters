@@ -24,27 +24,33 @@
     <ClCompile Include="..\delfols\FormMain.cpp">
       <Filter>2 Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\MyUtility\getStdString.net.cpp">
-      <Filter>2 Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\delfols\helper.cpp">
       <Filter>2 Source</Filter>
     </ClCompile>
     <ClCompile Include="..\delfols\noStdafxHelper.cpp">
       <Filter>2 Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\MyUtility\StartProcess.cpp">
+    <ClCompile Include="..\delfols\stdafx.cpp">
       <Filter>2 Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\delfols\stdafx.cpp">
+    <ClCompile Include="..\..\lsMisc\getStdString.net.cpp">
+      <Filter>2 Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lsMisc\StartProcess.cpp">
+      <Filter>2 Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\delfols\StartDeleteDialog.cpp">
+      <Filter>2 Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lsMisc\SHMoveFile.cpp">
+      <Filter>2 Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lsMisc\GetLastErrorString.cpp">
       <Filter>2 Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\delfols\FormMain.h">
-      <Filter>1 Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\MyUtility\getStdString.net.h">
       <Filter>1 Header</Filter>
     </ClInclude>
     <ClInclude Include="..\delfols\helper.h">
@@ -56,10 +62,22 @@
     <ClInclude Include="..\delfols\resource.h">
       <Filter>1 Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\MyUtility\StartProcess.h">
+    <ClInclude Include="..\delfols\stdafx.h">
       <Filter>1 Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\delfols\stdafx.h">
+    <ClInclude Include="..\..\lsMisc\getStdString.net.h">
+      <Filter>1 Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lsMisc\StartProcess.h">
+      <Filter>1 Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\delfols\StartDeleteDialog.h">
+      <Filter>1 Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lsMisc\SHMoveFile.h">
+      <Filter>1 Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lsMisc\GetLastErrorString.h">
       <Filter>1 Header</Filter>
     </ClInclude>
   </ItemGroup>
@@ -81,6 +99,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\delfols\FormMain.resX">
+      <Filter>3 Resource</Filter>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\delfols\StartDeleteDialog.resx">
       <Filter>3 Resource</Filter>
     </EmbeddedResource>
   </ItemGroup>
