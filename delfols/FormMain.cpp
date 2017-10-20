@@ -31,7 +31,8 @@ namespace delfols {
 		HashIni^ ini = Profile::ReadAll(inipath);
 
 		AmbLib::LoadFormXYWH(this, SECTION_FORMPOS, ini);
-		AmbLib::LoadListViewColumnWidth(this->lvMain, SECTION_LIST, KEY_MAIN_LIST, ini);
+		AmbLib::LoadListViewColumnWidth(lvMain, SECTION_LIST, KEY_MAIN_LIST, ini);
+		AmbLib::LoadListViewColumnWidth(lvLog, SECTION_LIST, KEY_MAIN_LOG, ini);
 	}
 
 	System::Void FormMain::tbAdd_Click(System::Object^  sender, System::EventArgs^  e)
@@ -146,6 +147,7 @@ namespace delfols {
 			return;
 
 		logInfos_.Clear();
+		logCache_.Clear();
 		lvLog->VirtualListSize = 0;
 
 		List<String^>^ allToDel = gcnew List<String^>();
@@ -354,8 +356,8 @@ namespace delfols {
 		String^ inipath = AmbLib::GetIniPath();
 		HashIni^ ini = Profile::ReadAll(inipath);
 
-		AmbLib::SaveListViewColumnWidth(this->lvMain, SECTION_LIST, KEY_MAIN_LIST, ini);
-
+		AmbLib::SaveListViewColumnWidth(lvMain, SECTION_LIST, KEY_MAIN_LIST, ini);
+		AmbLib::SaveListViewColumnWidth(lvLog, SECTION_LIST, KEY_MAIN_LOG, ini);
 		AmbLib::SaveFormXYWH(this, SECTION_FORMPOS, ini);
 		if (!Profile::WriteAll(ini, inipath))
 		{

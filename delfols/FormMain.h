@@ -18,6 +18,8 @@ namespace delfols {
 		
 		literal String^ SECTION_LIST = L"List";
 		literal String^ KEY_MAIN_LIST = L"Main";
+		literal String^ KEY_MAIN_LOG = L"Log";
+		
 
 	public:
 		System::Collections::Generic::List<LogInfo^> logInfos_;
