@@ -482,8 +482,8 @@ namespace delfols {
 		static bool reent;
 		if (reent)
 			return;
-		reent = true;
-		ReentBlocker
+		ReentBlocker rb(&reent, true, false);
+
 		if (!checkThreadCanContinue(TOI18NS(L"stop")))
 			return;
 
