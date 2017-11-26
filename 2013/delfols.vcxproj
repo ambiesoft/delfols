@@ -227,6 +227,7 @@
     <ClCompile Include="..\delfols\delfols.cpp" />
     <ClCompile Include="..\delfols\FormMain.cpp" />
     <ClCompile Include="..\..\lsMisc\getStdString.net.cpp" />
+    <ClCompile Include="..\delfols\FormMainInitializeComponent.cpp" />
     <ClCompile Include="..\delfols\helper.cpp" />
     <ClCompile Include="..\delfols\noStdafxHelper.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -250,6 +251,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\lsMisc\GetLastErrorString.h" />
+    <ClInclude Include="..\..\lsMisc\ReentBlocker.h" />
     <ClInclude Include="..\..\lsMisc\SHMoveFile.h" />
     <ClInclude Include="..\delfols\FormMain.h">
       <FileType>CppForm</FileType>
@@ -257,6 +259,7 @@
     <ClInclude Include="..\..\lsMisc\getStdString.net.h" />
     <ClInclude Include="..\delfols\helper.h" />
     <ClInclude Include="..\delfols\LogInfo.h" />
+    <ClInclude Include="..\delfols\LogListView.h" />
     <ClInclude Include="..\delfols\noStdafxHelper.h" />
     <ClInclude Include="..\delfols\resource.h" />
     <ClInclude Include="..\..\lsMisc\StartProcess.h" />

@@ -139,6 +139,7 @@
     <ClCompile Include="..\delfols\AssemblyInfo.cpp" />
     <ClCompile Include="..\delfols\delfols.cpp" />
     <ClCompile Include="..\delfols\FormMain.cpp" />
+    <ClCompile Include="..\delfols\FormMainInitializeComponent.cpp" />
     <ClCompile Include="..\delfols\helper.cpp" />
     <ClCompile Include="..\delfols\noStdafxHelper.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -161,6 +162,7 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="..\delfols\helper.h" />
+    <ClInclude Include="..\delfols\LogListView.h" />
     <ClInclude Include="..\delfols\noStdafxHelper.h" />
     <ClInclude Include="..\delfols\resource.h" />
     <ClInclude Include="..\delfols\StartDeleteDialog.h">

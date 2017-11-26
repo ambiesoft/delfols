@@ -3,6 +3,7 @@
 #include <vcclr.h>
 
 #include "../../lsMisc/SHMoveFile.h"
+#include "../../lsMisc/ReentBlocker.h"
 
 #include "FormMain.h"
 #include "helper.h"
@@ -478,6 +479,11 @@ namespace delfols {
 
 	System::Void FormMain::tbAsAdmin_Click(System::Object^  sender, System::EventArgs^  e)
 	{
+		static bool reent;
+		if (reent)
+			return;
+		reent = true;
+		ReentBlocker
 		if (!checkThreadCanContinue(TOI18NS(L"stop")))
 			return;
 
