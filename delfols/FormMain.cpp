@@ -4,6 +4,7 @@
 
 #include "../../lsMisc/SHMoveFile.h"
 #include "../../lsMisc/ReentBlocker.h"
+#include "../../lsMisc/ExpandPath.h"
 
 #include "FormMain.h"
 #include "helper.h"
@@ -165,13 +166,17 @@ namespace delfols {
 				continue;
 			}
 
-			if (!path || path->Length < 3)
-				continue;
+			array<String^>^ parts = path->Split(L';');
+			for each(String^ part in parts)
+			{
+				if (!part || part->Length < 3)
+					continue;
 
-			if (path[1] != L':' || path[2] != L'\\')
-				continue;
+				if (part[1] != L':' || part[2] != L'\\')
+					continue;
 
-			allToDel->Add(path);
+				allToDel->Add(part);
+			}
 		}
 
 		thread_ = gcnew Thread(gcnew ParameterizedThreadStart(this, &FormMain::threadStart));
@@ -283,6 +288,23 @@ namespace delfols {
 						DirectoryInfo di(actualpath);
 						actualpath = di.FullName;
 						item->SubItems->Add(actualpath);
+					}
+					else if (actualpath->IndexOf(L"*") >= 0)
+					{
+						wstring strap = getStdWstring(actualpath);
+						vector<wstring> results;
+						ExpandPath(strap, results);
+
+						System::Text::StringBuilder sbSubItem;
+						for (size_t i = 0; i < results.size(); ++i)
+						{
+							wstring t = results[i];
+							sbSubItem.Append(gcnew String(t.c_str()));
+
+							if ((i + 1) != results.size())
+								sbSubItem.Append(L";");
+						}
+						item->SubItems->Add(sbSubItem.ToString());
 					}
 				}
 			}

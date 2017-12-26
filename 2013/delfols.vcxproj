@@ -114,7 +114,7 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>REM copy $(ProjectDir)\..\delfols\config.ini $(TargetDir)</Command>
+      <Command>copy $(ProjectDir)\..\delfols\config.ini $(TargetDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -163,7 +163,8 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>REM copy $(ProjectDir)\..\delfols\config.ini $(TargetDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -193,7 +194,7 @@
     <Reference Include="Ambiesoft.AmbLib">
       <HintPath>..\..\..\..\..\..\Linkout\DNAssembly.NET4\Ambiesoft.AmbLib.dll</HintPath>
     </Reference>
-    <Reference Include="Ambiesoft.AmbLibcpp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="Ambiesoft.AmbLibcpp">
       <HintPath>..\..\..\..\..\..\Linkout\DNAssembly.NET4\Ambiesoft.AmbLibcpp.dll</HintPath>
     </Reference>
     <Reference Include="Ambiesoft.Profile">
@@ -221,8 +222,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\lsMisc\ExpandPath.cpp" />
     <ClCompile Include="..\..\lsMisc\GetLastErrorString.cpp" />
     <ClCompile Include="..\..\lsMisc\SHMoveFile.cpp" />
+    <ClCompile Include="..\..\lsMisc\StdStringReplace.cpp" />
+    <ClCompile Include="..\..\lsMisc\stdwin32\stdwin32.cpp" />
     <ClCompile Include="..\delfols\AssemblyInfo.cpp" />
     <ClCompile Include="..\delfols\delfols.cpp" />
     <ClCompile Include="..\delfols\FormMain.cpp" />
@@ -250,9 +254,12 @@
     <ClCompile Include="..\delfols\ThreadParam.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\lsMisc\ExpandPath.h" />
     <ClInclude Include="..\..\lsMisc\GetLastErrorString.h" />
     <ClInclude Include="..\..\lsMisc\ReentBlocker.h" />
     <ClInclude Include="..\..\lsMisc\SHMoveFile.h" />
+    <ClInclude Include="..\..\lsMisc\StdStringReplace.h" />
+    <ClInclude Include="..\..\lsMisc\stdwin32\stdwin32.h" />
     <ClInclude Include="..\delfols\FormMain.h">
       <FileType>CppForm</FileType>
     </ClInclude>

@@ -54,6 +54,15 @@
     <ClCompile Include="..\delfols\FormMainInitializeComponent.cpp">
       <Filter>2 Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\lsMisc\ExpandPath.cpp">
+      <Filter>2 Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lsMisc\StdStringReplace.cpp">
+      <Filter>2 Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lsMisc\stdwin32\stdwin32.cpp">
+      <Filter>2 Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\delfols\FormMain.h">
@@ -96,6 +105,15 @@
       <Filter>1 Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\lsMisc\ReentBlocker.h">
+      <Filter>1 Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lsMisc\ExpandPath.h">
+      <Filter>1 Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lsMisc\StdStringReplace.h">
+      <Filter>1 Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lsMisc\stdwin32\stdwin32.h">
       <Filter>1 Header</Filter>
     </ClInclude>
   </ItemGroup>
