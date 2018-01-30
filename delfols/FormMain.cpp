@@ -166,7 +166,7 @@ namespace delfols {
 				continue;
 			}
 
-			array<String^>^ parts = path->Split(L';');
+			cli::array<String^>^ parts = path->Split(L';');
 			for each(String^ part in parts)
 			{
 				if (!part || part->Length < 3)

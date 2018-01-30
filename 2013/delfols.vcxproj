@@ -225,7 +225,6 @@
     <ClCompile Include="..\..\lsMisc\ExpandPath.cpp" />
     <ClCompile Include="..\..\lsMisc\GetLastErrorString.cpp" />
     <ClCompile Include="..\..\lsMisc\SHMoveFile.cpp" />
-    <ClCompile Include="..\..\lsMisc\StdStringReplace.cpp" />
     <ClCompile Include="..\..\lsMisc\stdwin32\stdwin32.cpp" />
     <ClCompile Include="..\delfols\AssemblyInfo.cpp" />
     <ClCompile Include="..\delfols\delfols.cpp" />
@@ -258,7 +257,6 @@
     <ClInclude Include="..\..\lsMisc\GetLastErrorString.h" />
     <ClInclude Include="..\..\lsMisc\ReentBlocker.h" />
     <ClInclude Include="..\..\lsMisc\SHMoveFile.h" />
-    <ClInclude Include="..\..\lsMisc\StdStringReplace.h" />
     <ClInclude Include="..\..\lsMisc\stdwin32\stdwin32.h" />
     <ClInclude Include="..\delfols\FormMain.h">
       <FileType>CppForm</FileType>
