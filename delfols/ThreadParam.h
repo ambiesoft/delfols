@@ -8,10 +8,11 @@ namespace delfols {
 	{
 		bool dryrun_;
 		bool useShell_;
+		bool closeOnFinish_;
 		System::Collections::Generic::List<String^>^ allToDel_;
 	public:
-		ThreadParam(bool dryrun, bool useShell, System::Collections::Generic::List<String^>^ allToDel) :
-			dryrun_(dryrun), useShell_(useShell), allToDel_(allToDel)
+		ThreadParam(bool dryrun, bool useShell, bool closeOnFinish, System::Collections::Generic::List<String^>^ allToDel) :
+			dryrun_(dryrun), useShell_(useShell), closeOnFinish_(closeOnFinish), allToDel_(allToDel)
 		{}
 
 		property cli::array<String^>^ AllToDel
@@ -33,6 +34,13 @@ namespace delfols {
 			bool get()
 			{
 				return useShell_;
+			}
+		}
+		property bool IsCloseOnFinish
+		{
+			bool get()
+			{
+				return closeOnFinish_;
 			}
 		}
 	};

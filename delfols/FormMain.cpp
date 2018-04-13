@@ -6,6 +6,8 @@
 #include "../../lsMisc/ReentBlocker.h"
 #include "../../lsMisc/ExpandPath.h"
 
+#include <C:/Linkout/CommonDLL/TimedMessageBox.h>
+
 #include "FormMain.h"
 #include "helper.h"
 #include "noStdafxHelper.h"
@@ -14,6 +16,8 @@
 
 // thread suspend and resume
 #pragma warning(disable:4947)
+
+#pragma comment(lib, "user32.lib")
 
 namespace delfols {
 
@@ -82,26 +86,83 @@ namespace delfols {
 		}
 	}
 
-	bool FormMain::OnThreadStarted()
+	void FormMain::OnThreadStarted(ThreadParam^ tp)
 	{
-		return true;
+		return;
 	}
-	bool FormMain::OnThreadEnded()
+	void FormMain::OnThreadEnded(ThreadParam^ tp)
 	{
-		CppUtils::CenteredMessageBox(
-			this,
-			TOI18NS(L"Completed"),
-			Application::ProductName,
-			MessageBoxButtons::OK,
-			MessageBoxIcon::Information);
-		return true;
+		DASSERT(tp);
+		if (!tp->IsCloseOnFinish)
+		{
+			CppUtils::CenteredMessageBox(
+				this,
+				TOI18NS(L"Completed"),
+				Application::ProductName,
+				MessageBoxButtons::OK,
+				MessageBoxIcon::Information);
+			return;
+		}
+
+		HMODULE hModule = LoadLibrary(L"TimedMessageBox.dll");
+		if (!hModule)
+		{
+			CppUtils::CenteredMessageBox(
+				this,
+				TOI18NS(L"Failed to load TimedMessageBox.dll"),
+				Application::ProductName,
+				MessageBoxButtons::OK,
+				MessageBoxIcon::Information);
+			return;
+		}
+
+		FNTimedMessageBox2 func2 = NULL;
+		func2 = (FNTimedMessageBox2)GetProcAddress(hModule, "fnTimedMessageBox2");
+		if (!func2)
+		{
+			CppUtils::CenteredMessageBox(
+				this,
+				TOI18NS(L"Failed to load function fnTimedMessageBox2"),
+				Application::ProductName,
+				MessageBoxButtons::OK,
+				MessageBoxIcon::Information);
+			return;
+		}
+	
+
+		TIMEDMESSAGEBOX_PARAMS tmbparam = { 0 };
+		tmbparam.size = sizeof(tp);
+		tmbparam.flags = TIMEDMESSAGEBOX_FLAGS_POSITION | TIMEDMESSAGEBOX_FLAGS_SHOWCMD ;
+		tmbparam.hWndCenterParent = (HWND)this->Handle.ToPointer();
+		tmbparam.position = TIMEDMESSAGEBOX_POSITION_CENTERPARENT;
+		tmbparam.nShowCmd = SW_SHOW;
+
+		wstring messageTitle = TOI18NS(L"Finished Deleting");
+		wstring message = TOI18NS(L"Finished Deleting. Click OK to close.");
+		MessageBeep(MB_ICONINFORMATION);
+		int dret = func2((HWND)this->Handle.ToPointer(),
+			30,
+			messageTitle.c_str(),
+			message.c_str(),
+			&tmbparam);
+		bool bTimeouted = (dret & TIMEDMESSAGEBOX_FLAGS_TIMEDOUT) != 0;
+		dret &= ~TIMEDMESSAGEBOX_FLAGS_TIMEDOUT;
+
+		switch (dret)
+		{
+		case IDCANCEL:
+			return;
+		}
+
+		Close();
+		return;
 	}
 
 	void FormMain::threadStart(Object^ obj)
 	{
 		ThreadParam^ tp = (ThreadParam^)obj;
 
-		BeginInvoke(gcnew BVDelegate(this, &FormMain::OnThreadStarted));
+		BeginInvoke(gcnew VParamDelegate(this, &FormMain::OnThreadStarted), tp);
 
 
 		for each(String^ path in tp->AllToDel)
@@ -124,7 +185,7 @@ namespace delfols {
 			}
 		}
 		addToLogEnd();
-		BeginInvoke(gcnew BVDelegate(this, &FormMain::OnThreadEnded));
+		BeginInvoke(gcnew VParamDelegate(this, &FormMain::OnThreadEnded), tp);
 	}
 
 
@@ -183,7 +244,7 @@ namespace delfols {
 		thread_->IsBackground = true;
 		if (dlg.IsDryrun)
 			thread_->Priority = ThreadPriority::Lowest;
-		thread_->Start(gcnew ThreadParam(dlg.IsDryrun, dlg.IsShellDelete, allToDel));
+		thread_->Start(gcnew ThreadParam(dlg.IsDryrun, dlg.IsShellDelete, dlg.IsCloseOnFinish, allToDel));
 	}
 	System::Void FormMain::lvLog_RetrieveVirtualItem(System::Object^  sender, System::Windows::Forms::RetrieveVirtualItemEventArgs^  e)
 	{

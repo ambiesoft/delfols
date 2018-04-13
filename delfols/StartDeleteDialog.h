@@ -38,7 +38,8 @@ namespace delfols {
 	private: System::Windows::Forms::CheckBox^  chkShellDelete;
 	private: System::Windows::Forms::Button^  btnOK;
 	private: System::Windows::Forms::Button^  btnCancel;
-	protected: 
+	private: System::Windows::Forms::CheckBox^  chkCloseOnFinish;
+	protected:
 
 	protected: 
 
@@ -60,12 +61,13 @@ namespace delfols {
 			this->chkShellDelete = (gcnew System::Windows::Forms::CheckBox());
 			this->btnOK = (gcnew System::Windows::Forms::Button());
 			this->btnCancel = (gcnew System::Windows::Forms::Button());
+			this->chkCloseOnFinish = (gcnew System::Windows::Forms::CheckBox());
 			this->SuspendLayout();
 			// 
 			// chkDryrun
 			// 
 			this->chkDryrun->AutoSize = true;
-			this->chkDryrun->Location = System::Drawing::Point(12, 99);
+			this->chkDryrun->Location = System::Drawing::Point(12, 118);
 			this->chkDryrun->Name = L"chkDryrun";
 			this->chkDryrun->Size = System::Drawing::Size(57, 17);
 			this->chkDryrun->TabIndex = 1;
@@ -104,6 +106,16 @@ namespace delfols {
 			this->btnCancel->Text = L"&Cancel";
 			this->btnCancel->UseVisualStyleBackColor = true;
 			// 
+			// chkCloseOnFinish
+			// 
+			this->chkCloseOnFinish->AutoSize = true;
+			this->chkCloseOnFinish->Location = System::Drawing::Point(12, 95);
+			this->chkCloseOnFinish->Name = L"chkCloseOnFinish";
+			this->chkCloseOnFinish->Size = System::Drawing::Size(97, 17);
+			this->chkCloseOnFinish->TabIndex = 4;
+			this->chkCloseOnFinish->Text = L"&Close on Finish";
+			this->chkCloseOnFinish->UseVisualStyleBackColor = true;
+			// 
 			// StartDeleteDialog
 			// 
 			this->AcceptButton = this->btnOK;
@@ -111,6 +123,7 @@ namespace delfols {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->CancelButton = this->btnCancel;
 			this->ClientSize = System::Drawing::Size(455, 151);
+			this->Controls->Add(this->chkCloseOnFinish);
 			this->Controls->Add(this->btnCancel);
 			this->Controls->Add(this->btnOK);
 			this->Controls->Add(this->chkShellDelete);
@@ -141,6 +154,13 @@ namespace delfols {
 				bool get()
 				{
 					return chkShellDelete->Checked;
+				}
+			}
+			property bool IsCloseOnFinish
+			{
+				bool get()
+				{
+					return chkCloseOnFinish->Checked;
 				}
 			}
 	};

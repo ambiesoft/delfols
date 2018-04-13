@@ -67,7 +67,9 @@ namespace delfols {
 #pragma endregion
 
 	private:
+		delegate void VVDelegate();
 		delegate bool BVDelegate();
+		delegate void VParamDelegate(ThreadParam^ tp);
 		System::Threading::Thread^ thread_;
 		System::Collections::Generic::List<LogInfo^> sendCache_;
 
@@ -80,8 +82,8 @@ namespace delfols {
 		void addToLogMain();
 		void addToLogEnd();
 		void threadStart(Object^ obj);
-		bool OnThreadStarted();
-		bool OnThreadEnded();
+		void OnThreadStarted(ThreadParam^ tp);
+		void OnThreadEnded(ThreadParam^ tp);
 		bool checkThreadCanContinue(String^ message);
 	private:
 		System::Void tbAdd_Click(System::Object^  sender, System::EventArgs^  e);
