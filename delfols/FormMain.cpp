@@ -145,8 +145,8 @@ namespace delfols {
 			messageTitle.c_str(),
 			message.c_str(),
 			&tmbparam);
-		bool bTimeouted = (dret & TIMEDMESSAGEBOX_FLAGS_TIMEDOUT) != 0;
-		dret &= ~TIMEDMESSAGEBOX_FLAGS_TIMEDOUT;
+		bool bTimeouted = (dret & TIMEDMESSAGEBOX_RESULT_TIMEDOUT) != 0;
+		dret &= ~TIMEDMESSAGEBOX_RESULT_TIMEDOUT;
 
 		switch (dret)
 		{
