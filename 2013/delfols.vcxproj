@@ -224,6 +224,7 @@ copy C:\Linkout\CommonDLL\TimedMessageBox.dll $(TargetDir)</Command>
   <ItemGroup>
     <ClCompile Include="..\..\lsMisc\ExpandPath.cpp" />
     <ClCompile Include="..\..\lsMisc\GetLastErrorString.cpp" />
+    <ClCompile Include="..\..\lsMisc\HighDPI.cpp" />
     <ClCompile Include="..\..\lsMisc\SHMoveFile.cpp" />
     <ClCompile Include="..\..\lsMisc\stdwin32\stdwin32.cpp" />
     <ClCompile Include="..\delfols\AssemblyInfo.cpp" />
@@ -255,6 +256,7 @@ copy C:\Linkout\CommonDLL\TimedMessageBox.dll $(TargetDir)</Command>
   <ItemGroup>
     <ClInclude Include="..\..\lsMisc\ExpandPath.h" />
     <ClInclude Include="..\..\lsMisc\GetLastErrorString.h" />
+    <ClInclude Include="..\..\lsMisc\HighDPI.h" />
     <ClInclude Include="..\..\lsMisc\ReentBlocker.h" />
     <ClInclude Include="..\..\lsMisc\SHMoveFile.h" />
     <ClInclude Include="..\..\lsMisc\stdwin32\stdwin32.h" />

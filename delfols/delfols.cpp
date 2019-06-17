@@ -8,7 +8,7 @@ using namespace Ambiesoft;
 [STAThreadAttribute]
 int main(array<System::String ^> ^args)
 {
-	// CppUtils::testMessageBox("AAA");
+	InitHighDPISupport();
 
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false); 
