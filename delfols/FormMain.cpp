@@ -132,7 +132,9 @@ namespace delfols {
 
 		TIMEDMESSAGEBOX_PARAMS tmbparam = { 0 };
 		tmbparam.size = sizeof(tp);
-		tmbparam.flags = TIMEDMESSAGEBOX_FLAGS_POSITION | TIMEDMESSAGEBOX_FLAGS_SHOWCMD ;
+		tmbparam.flags = TIMEDMESSAGEBOX_FLAGS_POSITION |
+			TIMEDMESSAGEBOX_FLAGS_SHOWCMD |
+			TIMEDMESSAGEBOX_FLAGS_HIDERETRY;
 		tmbparam.hWndCenterParent = (HWND)this->Handle.ToPointer();
 		tmbparam.position = TIMEDMESSAGEBOX_POSITION_CENTERPARENT;
 		tmbparam.nShowCmd = SW_SHOW;
@@ -145,8 +147,6 @@ namespace delfols {
 			messageTitle.c_str(),
 			message.c_str(),
 			&tmbparam);
-		bool bTimeouted = (dret & TIMEDMESSAGEBOX_RESULT_TIMEDOUT) != 0;
-		dret &= ~TIMEDMESSAGEBOX_RESULT_TIMEDOUT;
 
 		switch (dret)
 		{
@@ -510,7 +510,7 @@ namespace delfols {
 			{
 				pin_ptr<const wchar_t> pPath = PtrToStringChars(path);
 
-				int ret = SHDeleteFile(pPath,FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT);
+				int ret = SHDeleteFileEx(pPath,FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT);
 				addToLog(path, ret==0, gcnew String(GetSHFileOpErrorString(ret).c_str()));
 			}
 			else
@@ -542,7 +542,7 @@ namespace delfols {
 			else if (tp->IsShellDelete)
 			{
 				pin_ptr<const wchar_t> pPath = PtrToStringChars(path);
-				int ret = SHDeleteFile(pPath, FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT);
+				int ret = SHDeleteFileEx(pPath, FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT);
 				addToLog(path, ret==0, gcnew String(GetSHFileOpErrorString(ret).c_str()));
 			}
 			else

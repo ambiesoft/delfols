@@ -9,7 +9,7 @@ namespace delfols {
 	// this->lvLog = (gcnew LogListView());
 	void FormMain::InitializeComponent(void)
 	{
-		System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(FormMain::typeid));
+		System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(FormMain::typeid));
 		this->lvMain = (gcnew System::Windows::Forms::ListView());
 		this->chEntry = (gcnew System::Windows::Forms::ColumnHeader());
 		this->chActualPath = (gcnew System::Windows::Forms::ColumnHeader());
@@ -23,7 +23,7 @@ namespace delfols {
 		this->chFile = (gcnew System::Windows::Forms::ColumnHeader());
 		this->chResult = (gcnew System::Windows::Forms::ColumnHeader());
 		this->toolMain->SuspendLayout();
-		(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->spRoot))->BeginInit();
+		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->spRoot))->BeginInit();
 		this->spRoot->Panel1->SuspendLayout();
 		this->spRoot->Panel2->SuspendLayout();
 		this->spRoot->SuspendLayout();
@@ -35,7 +35,7 @@ namespace delfols {
 		this->lvMain->Dock = System::Windows::Forms::DockStyle::Fill;
 		this->lvMain->Location = System::Drawing::Point(0, 25);
 		this->lvMain->Name = L"lvMain";
-		this->lvMain->Size = System::Drawing::Size(699, 200);
+		this->lvMain->Size = System::Drawing::Size(699, 182);
 		this->lvMain->TabIndex = 0;
 		this->lvMain->UseCompatibleStateImageBehavior = false;
 		this->lvMain->View = System::Windows::Forms::View::Details;
@@ -64,7 +64,7 @@ namespace delfols {
 		// 
 		// tbAdd
 		// 
-		this->tbAdd->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tbAdd.Image")));
+		this->tbAdd->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"tbAdd.Image")));
 		this->tbAdd->ImageTransparentColor = System::Drawing::Color::Magenta;
 		this->tbAdd->Name = L"tbAdd";
 		this->tbAdd->Size = System::Drawing::Size(49, 22);
@@ -74,19 +74,19 @@ namespace delfols {
 		// 
 		// tbExecute
 		// 
-		this->tbExecute->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tbExecute.Image")));
+		this->tbExecute->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"tbExecute.Image")));
 		this->tbExecute->ImageTransparentColor = System::Drawing::Color::Magenta;
 		this->tbExecute->Name = L"tbExecute";
-		this->tbExecute->Size = System::Drawing::Size(67, 22);
+		this->tbExecute->Size = System::Drawing::Size(73, 22);
 		this->tbExecute->Text = L"Execute";
 		this->tbExecute->Click += gcnew System::EventHandler(this, &FormMain::tbExecute_Click);
 		// 
 		// tbAsAdmin
 		// 
-		this->tbAsAdmin->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tbAsAdmin.Image")));
+		this->tbAsAdmin->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"tbAsAdmin.Image")));
 		this->tbAsAdmin->ImageTransparentColor = System::Drawing::Color::Magenta;
 		this->tbAsAdmin->Name = L"tbAsAdmin";
-		this->tbAsAdmin->Size = System::Drawing::Size(79, 22);
+		this->tbAsAdmin->Size = System::Drawing::Size(82, 22);
 		this->tbAsAdmin->Text = L"As Admin";
 		this->tbAsAdmin->ToolTipText = L"As Admin";
 		this->tbAsAdmin->Click += gcnew System::EventHandler(this, &FormMain::tbAsAdmin_Click);
@@ -106,8 +106,8 @@ namespace delfols {
 		// spRoot.Panel2
 		// 
 		this->spRoot->Panel2->Controls->Add(this->lvLog);
-		this->spRoot->Size = System::Drawing::Size(699, 453);
-		this->spRoot->SplitterDistance = 225;
+		this->spRoot->Size = System::Drawing::Size(699, 418);
+		this->spRoot->SplitterDistance = 207;
 		this->spRoot->TabIndex = 2;
 		// 
 		// lvLog
@@ -117,7 +117,7 @@ namespace delfols {
 		this->lvLog->FullRowSelect = true;
 		this->lvLog->Location = System::Drawing::Point(0, 0);
 		this->lvLog->Name = L"lvLog";
-		this->lvLog->Size = System::Drawing::Size(699, 224);
+		this->lvLog->Size = System::Drawing::Size(699, 207);
 		this->lvLog->TabIndex = 0;
 		this->lvLog->UseCompatibleStateImageBehavior = false;
 		this->lvLog->View = System::Windows::Forms::View::Details;
@@ -140,10 +140,12 @@ namespace delfols {
 		// 
 		// FormMain
 		// 
-		this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
-		this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-		this->ClientSize = System::Drawing::Size(699, 453);
+		this->AutoScaleDimensions = System::Drawing::SizeF(96, 96);
+		this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Dpi;
+		this->ClientSize = System::Drawing::Size(699, 418);
 		this->Controls->Add(this->spRoot);
+		this->Font = (gcnew System::Drawing::Font(L"Meiryo UI", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(128)));
 		this->Name = L"FormMain";
 		this->Text = L"delfols";
 		this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &FormMain::FormMain_FormClosing);
@@ -153,7 +155,7 @@ namespace delfols {
 		this->spRoot->Panel1->ResumeLayout(false);
 		this->spRoot->Panel1->PerformLayout();
 		this->spRoot->Panel2->ResumeLayout(false);
-		(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->spRoot))->EndInit();
+		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->spRoot))->EndInit();
 		this->spRoot->ResumeLayout(false);
 		this->ResumeLayout(false);
 
