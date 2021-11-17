@@ -23,7 +23,10 @@ namespace delfols {
 
 	public:
 		System::Collections::Generic::List<LogInfo^> logInfos_;
-		System::Collections::Generic::List<ListViewItem^> logCache_;
+	private: System::Windows::Forms::ToolStripDropDownButton^ tsddbHelp;
+	public:
+	private: System::Windows::Forms::ToolStripMenuItem^ tsmiAbout;
+		   System::Collections::Generic::List<ListViewItem^> logCache_;
 
 	public:
 		FormMain(void);
@@ -93,8 +96,9 @@ namespace delfols {
 		System::Void FormMain_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e);
 		System::Void lvLog_RetrieveVirtualItem(System::Object^  sender, System::Windows::Forms::RetrieveVirtualItemEventArgs^  e);
 		System::Void lvLog_CacheVirtualItems(System::Object^  sender, System::Windows::Forms::CacheVirtualItemsEventArgs^  e);
-
-};
+		System::Void tsmiAbout_Click(System::Object^ sender, System::EventArgs^ e);
+	
+	};
 
 
 

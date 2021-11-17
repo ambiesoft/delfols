@@ -13,6 +13,7 @@
 #include "noStdafxHelper.h"
 #include "ThreadParam.h"
 #include "StartDeleteDialog.h"
+using namespace System::Text;
 
 // thread suspend and resume
 #pragma warning(disable:4947)
@@ -449,6 +450,19 @@ namespace delfols {
 		}
 	}
 
+	ref struct ListUpdateLocker
+	{
+		System::Windows::Forms::ListView^ c_;
+		ListUpdateLocker(System::Windows::Forms::ListView^ c) :c_(c)
+		{
+			DASSERT(c && c->IsHandleCreated && !c->IsDisposed);
+			c_->BeginUpdate();
+		}
+		~ListUpdateLocker()
+		{
+			c_->EndUpdate();
+		}
+	};
 	delegate void LogDelegate();
 	void FormMain::addToLogMain()
 	{
@@ -457,6 +471,9 @@ namespace delfols {
 		logInfos_.AddRange(sendCache_.ToArray());
 		sendCache_.Clear();
 		lvLog->VirtualListSize = logInfos_.Count;
+
+		ListUpdateLocker lul(lvLog);
+		lvLog->Items[lvLog->Items->Count - 1]->EnsureVisible();
 	}
 	void FormMain::addToLog(String^ filename, bool ok, String^ desc)
 	{
@@ -582,5 +599,20 @@ namespace delfols {
 			ShowErrorMessage(this, ex);
 		}
 	}
-
+	System::Void FormMain::tsmiAbout_Click(System::Object^ sender, System::EventArgs^ e)
+	{
+		StringBuilder sb;
+		sb.AppendLine(String::Format(L"{0} v{1}",
+			Application::ProductName,
+			AmbLib::getAssemblyVersion(System::Reflection::Assembly::GetExecutingAssembly(), 3)));
+		sb.AppendLine();
+		sb.AppendLine(L"https://ambiesoft.com/");
+	
+		JR::Utils::GUI::Forms::FlexibleMessageBox::Show(
+			this,
+			sb.ToString(),
+			Application::ProductName,
+			MessageBoxButtons::OK,
+			MessageBoxIcon::Information);
+	}
 }

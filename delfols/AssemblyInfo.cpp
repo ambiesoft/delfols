@@ -9,14 +9,14 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyTitleAttribute("delfols")];
 [assembly:AssemblyDescriptionAttribute("")];
 [assembly:AssemblyConfigurationAttribute("")];
-[assembly:AssemblyCompanyAttribute("")];
+[assembly:AssemblyCompanyAttribute("Ambiesoft")];
 [assembly:AssemblyProductAttribute("delfols")];
 [assembly:AssemblyCopyrightAttribute("Copyright (c)  2011")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 
 
-[assembly:AssemblyVersionAttribute("1.1.*")];
+[assembly:AssemblyVersionAttribute("1.2.1.*")];
 
 [assembly:ComVisible(false)];
 

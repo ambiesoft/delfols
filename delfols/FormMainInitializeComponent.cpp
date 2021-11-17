@@ -22,6 +22,8 @@ namespace delfols {
 		this->chNo = (gcnew System::Windows::Forms::ColumnHeader());
 		this->chFile = (gcnew System::Windows::Forms::ColumnHeader());
 		this->chResult = (gcnew System::Windows::Forms::ColumnHeader());
+		this->tsddbHelp = (gcnew System::Windows::Forms::ToolStripDropDownButton());
+		this->tsmiAbout = (gcnew System::Windows::Forms::ToolStripMenuItem());
 		this->toolMain->SuspendLayout();
 		(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->spRoot))->BeginInit();
 		this->spRoot->Panel1->SuspendLayout();
@@ -33,6 +35,7 @@ namespace delfols {
 		// 
 		this->lvMain->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(2) { this->chEntry, this->chActualPath });
 		this->lvMain->Dock = System::Windows::Forms::DockStyle::Fill;
+		this->lvMain->HideSelection = false;
 		this->lvMain->Location = System::Drawing::Point(0, 25);
 		this->lvMain->Name = L"lvMain";
 		this->lvMain->Size = System::Drawing::Size(699, 182);
@@ -52,9 +55,9 @@ namespace delfols {
 		// 
 		// toolMain
 		// 
-		this->toolMain->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+		this->toolMain->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {
 			this->tbAdd, this->tbExecute,
-				this->tbAsAdmin
+				this->tbAsAdmin, this->tsddbHelp
 		});
 		this->toolMain->Location = System::Drawing::Point(0, 0);
 		this->toolMain->Name = L"toolMain";
@@ -115,6 +118,7 @@ namespace delfols {
 		this->lvLog->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(3) { this->chNo, this->chFile, this->chResult });
 		this->lvLog->Dock = System::Windows::Forms::DockStyle::Fill;
 		this->lvLog->FullRowSelect = true;
+		this->lvLog->HideSelection = false;
 		this->lvLog->Location = System::Drawing::Point(0, 0);
 		this->lvLog->Name = L"lvLog";
 		this->lvLog->Size = System::Drawing::Size(699, 207);
@@ -137,6 +141,23 @@ namespace delfols {
 		// chResult
 		// 
 		this->chResult->Text = L"Result";
+		// 
+		// tsddbHelp
+		// 
+		this->tsddbHelp->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Text;
+		this->tsddbHelp->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->tsmiAbout });
+		this->tsddbHelp->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"tsddbHelp.Image")));
+		this->tsddbHelp->ImageTransparentColor = System::Drawing::Color::Magenta;
+		this->tsddbHelp->Name = L"tsddbHelp";
+		this->tsddbHelp->Size = System::Drawing::Size(46, 22);
+		this->tsddbHelp->Text = L"&Help";
+		// 
+		// tsmiAbout
+		// 
+		this->tsmiAbout->Name = L"tsmiAbout";
+		this->tsmiAbout->Size = System::Drawing::Size(180, 22);
+		this->tsmiAbout->Text = L"&About";
+		this->tsmiAbout->Click += gcnew System::EventHandler(this, &FormMain::tsmiAbout_Click);
 		// 
 		// FormMain
 		// 
